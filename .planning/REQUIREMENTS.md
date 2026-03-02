@@ -21,7 +21,7 @@ Requirements for execution-side integration. Each maps to roadmap phases.
 
 ### End-to-End Demo
 
-- [ ] **DEMO-01**: Demo script runs full workflow: init → plan → split → parallel execute → cross-review
+- [ ] **DEMO-01**: Demo script runs full workflow: init -> plan -> split -> parallel execute -> cross-review
 - [ ] **DEMO-02**: Demo validates each stage completed successfully before advancing
 
 ### Installer Hardening
@@ -64,26 +64,26 @@ Requirements for execution-side integration. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| WKTREE-01 | TBD | Pending |
-| WKTREE-02 | TBD | Pending |
-| WKTREE-03 | TBD | Pending |
-| CODEX-01 | TBD | Pending |
-| CODEX-02 | TBD | Pending |
-| CODEX-03 | TBD | Pending |
-| DEMO-01 | TBD | Pending |
-| DEMO-02 | TBD | Pending |
-| INST-01 | TBD | Pending |
-| INST-02 | TBD | Pending |
-| INST-03 | TBD | Pending |
-| CONF-01 | TBD | Pending |
-| CONF-02 | TBD | Pending |
-| CONF-03 | TBD | Pending |
+| INST-01 | Phase 3 | Pending |
+| INST-02 | Phase 3 | Pending |
+| INST-03 | Phase 3 | Pending |
+| CONF-01 | Phase 3 | Pending |
+| CONF-02 | Phase 3 | Pending |
+| CONF-03 | Phase 3 | Pending |
+| WKTREE-01 | Phase 4 | Pending |
+| WKTREE-02 | Phase 4 | Pending |
+| WKTREE-03 | Phase 4 | Pending |
+| CODEX-01 | Phase 5 | Pending |
+| CODEX-02 | Phase 5 | Pending |
+| CODEX-03 | Phase 5 | Pending |
+| DEMO-01 | Phase 6 | Pending |
+| DEMO-02 | Phase 6 | Pending |
 
 **Coverage:**
 - v1.1 requirements: 14 total
-- Mapped to phases: 0 (pending roadmap)
-- Unmapped: 14 ⚠️
+- Mapped to phases: 14
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-03-02*
-*Last updated: 2026-03-02 after v1.1 milestone start*
+*Last updated: 2026-03-02 after v1.1 roadmap creation*
