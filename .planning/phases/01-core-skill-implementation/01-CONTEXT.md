@@ -21,8 +21,9 @@ Implement the three custom Claude Code skills (`/init-gsd`, `/codex-review`, `/g
 - When Codex CLI is not installed or API key missing: graceful skip with warning, GSD verification runs solo
 
 ### Skill Completeness
-- Quality bar: works reliably on happy path — all steps execute without errors when prerequisites are met
-- Edge cases handled with clear error messages, no silent failures
+- Quality bar: PRODUCTION-GRADE — handle all realistic failure modes (missing deps, partial installs, network timeouts, conflicting configs, interrupted runs)
+- Clear error recovery for each failure mode — skills should never leave things in a broken state
+- No silent failures — every error path produces an actionable message
 - `/init-gsd` auto-chains to `/gsd:new-project` with user prompt ("Run /gsd:new-project now?")
 - `/codex-review` diff scope: last N commits (default 5), user can pass `--commits=N` to adjust
 - `/gsd-codex-verify` writes VERIFICATION.md AND displays results inline (both)
