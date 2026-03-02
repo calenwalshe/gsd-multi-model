@@ -8,6 +8,17 @@ A multi-model development framework that combines Claude Code and Codex CLI into
 
 Structured dual-tool workflow that eliminates per-session re-explanation and splits work by tool strengths automatically.
 
+## Current Milestone: v1.1 Execution-Side Integration
+
+**Goal:** Make the dual-tool workflow actually execute — worktree isolation, Codex runner, cross-review wiring, and a complete end-to-end demo.
+
+**Target features:**
+- Worktree automation for parallel Codex execution
+- Codex execution wrapper (`bin/codex-task.sh`)
+- End-to-end demo of full workflow loop
+- Installer hardening with dependency checks
+- Global config templates for Claude and Codex
+
 ## Requirements
 
 ### Validated
@@ -63,4 +74,4 @@ Developers who use both Claude Code and Codex CLI and want a repeatable harness 
 End-to-end demo: `/init-gsd` → plan → auto-split → Codex builds in worktree → cross-review. Full loop without manual intervention beyond initial project decisions.
 
 ---
-*Last updated: 2026-03-02 after v1.0 milestone*
+*Last updated: 2026-03-02 after v1.1 milestone start*
