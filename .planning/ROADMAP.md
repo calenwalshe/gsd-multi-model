@@ -39,11 +39,11 @@ See: `.planning/milestones/v1.0-ROADMAP.md` for full details
   2. Running `install.sh` on a properly equipped machine completes and all installed files match their sources
   3. Running `install.sh` installs global Claude config with dual-tool defaults to `~/.claude/` without overwriting existing user config
   4. Running `install.sh` installs global Codex config with `--full-auto` defaults without overwriting existing user config
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 03-01: TBD
-- [ ] 03-02: TBD
+- [ ] 03-01-PLAN.md — Harden install.sh with pre-flight checks, integrity validation, ANSI output, --force flag, unified config strategy
+- [ ] 03-02-PLAN.md — Upgrade test-install.sh with diff-based integrity checks
 
 ### Phase 4: Worktree Automation
 **Goal**: Users can create and tear down isolated git worktrees for parallel Codex work with a single command
@@ -93,7 +93,7 @@ Phases execute in numeric order: 3 -> 4 -> 5 -> 6
 |-------|-----------|----------------|--------|-----------|
 | 1. Core Skill Implementation | v1.0 | 3/3 | Complete | 2026-03-02 |
 | 2. Task Splitting & Routing | v1.0 | 2/2 | Complete | 2026-03-02 |
-| 3. Installer Hardening & Global Config | v1.1 | 0/? | Not started | - |
+| 3. Installer Hardening & Global Config | v1.1 | 0/2 | Planning complete | - |
 | 4. Worktree Automation | v1.1 | 0/? | Not started | - |
 | 5. Codex Execution Wrapper | v1.1 | 0/? | Not started | - |
 | 6. End-to-End Demo | v1.1 | 0/? | Not started | - |
