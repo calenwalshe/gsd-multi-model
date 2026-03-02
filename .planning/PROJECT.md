@@ -1,36 +1,66 @@
 # gsd-multi-model
 
-## Vision
-A full framework for multi-model AI development that combines Claude Code (planner/orchestrator) and Codex CLI (builder/executor) into a unified, spec-driven workflow. Installed via a single `/init-gsd` slash command inside Claude Code.
+## What This Is
 
-## Problem
-Developers using both Claude Code and Codex CLI lack a structured way to combine them. Each session requires re-explaining the workflow, tasks aren't automatically split by tool strengths, and there's no cross-model verification. Work is ad-hoc rather than repeatable.
+A multi-model development framework that combines Claude Code and Codex CLI into a unified, spec-driven workflow. Skills, task-splitting heuristics, and orchestration logic — installed via a single `/init-gsd` command.
 
-## Solution
-A bootstrap package that installs skills, custom GSD agents, orchestration logic, task splitting heuristics, and worktree management. One command (`/init-gsd`) wires up any project with the dual-tool workflow — Claude plans and handles complexity, Codex executes autonomously in parallel, both verify each other's work.
+## Core Value
 
-## Core Features
-1. **`/init-gsd` bootstrap** — Creates AGENTS.md, CLAUDE.md, .claude/rules/, git init from within Claude Code
-2. **Automatic task splitting** — Heuristic during /gsd:plan-phase: multi-file/architecture → Claude, CRUD/tests/scripts → Codex; user can override
-3. **Codex worktree execution** — Auto-create git worktree, run `codex --full-auto` with task prompt, merge back
-4. **Cross-model verification** — `/gsd-codex-verify` runs GSD verifier then Codex review; each tool reviews the other's output
-5. **Global skills** — `/codex-review` and `/gsd-codex-verify` available across all projects
-6. **Anti-context-rot** — Fresh subagent per task, .planning/ as persistent source of truth
+Structured dual-tool workflow that eliminates per-session re-explanation and splits work by tool strengths automatically.
+
+## Requirements
+
+### Validated
+
+- ✓ `/init-gsd` bootstrap with idempotency, stack detection, full project scaffolding — v1.0
+- ✓ `/codex-review` cross-model review with Codex invocation and severity reporting — v1.0
+- ✓ `/gsd-codex-verify` dual verification gate with JSONL parsing and structured reports — v1.0
+- ✓ Task-splitting heuristic with 4-signal analysis, type shortcuts, user overrides — v1.0
+
+### Active
+
+- [ ] Worktree automation for parallel Codex execution
+- [ ] Codex execution wrapper (`bin/codex-task.sh`)
+- [ ] End-to-end demo of full workflow loop
+- [ ] Installer hardening with dependency checks
+- [ ] Global config templates for Claude and Codex
+
+### Out of Scope
+
+- Gemini, OpenCode, or other AI tool integration — Claude + Codex only
+- Mobile/web UI — CLI-first approach
+- Cloud hosting — local development tool
+
+## Context
+
+Shipped v1.0 with planning-side integration complete: 3 production skills + task routing heuristic + plan checker validation. Execution-side (worktrees, Codex runner, cross-review wiring) deferred to v1.1.
+
+Tech stack: Claude Code skills (markdown), GSD agents (prompt engineering), Bash (install/worktree scripts).
+31 files, 7,173 lines added across 2 phases.
+
+## Key Decisions
+
+| Decision | Outcome |
+|----------|---------|
+| Compound keyword patterns for type shortcuts | ✓ Good — avoids false positives on single words |
+| Conservative routing default (ambiguous → Claude) | ✓ Good — safer fallback |
+| Embed heuristic in planner prompt, not standalone module | ✓ Good — zero new dependencies |
+| Phase-gated validation (skip routing checks for Phase 1) | ✓ Good — backward compatible |
+| Severity tiering in plan checker (INFO/ISSUE/ERROR) | ✓ Good — non-blocking advisories |
+
+## Constraints
+
+- Skills must work across Claude Code sessions without re-explaining
+- All instruction files must stay under 200 lines for >92% rule adherence
+- No external dependencies beyond Claude Code and Codex CLI
 
 ## Target Users
-Developers who use both Claude Code and Codex CLI and want a repeatable harness to combine them without re-explaining every session.
+
+Developers who use both Claude Code and Codex CLI and want a repeatable harness to combine them.
 
 ## Success Criteria
-End-to-end demo: `/init-gsd` → plan a feature → auto-split tasks → Codex builds in worktree → cross-review works. The full loop must function without manual intervention beyond initial project decisions.
 
-## Tech Stack
-- Claude Code (CLI) — planning, orchestration, complex implementation
-- Codex CLI — autonomous execution, cross-model review
-- GSD framework — spec-driven meta-prompting, state management
-- Git worktrees — parallel isolated execution
-- Bash — installation, worktree management scripts
+End-to-end demo: `/init-gsd` → plan → auto-split → Codex builds in worktree → cross-review. Full loop without manual intervention beyond initial project decisions.
 
-## Scope Boundaries
-- **In scope**: Claude + Codex integration only
-- **Out of scope**: Gemini, OpenCode, or other AI tool integration
-- **Deliverable**: Full framework — skills, custom GSD agents, orchestration logic, task splitting, worktree management
+---
+*Last updated: 2026-03-02 after v1.0 milestone*
