@@ -2,22 +2,18 @@
 
 ## What This Is
 
-A multi-model development framework that combines Claude Code and Codex CLI into a unified, spec-driven workflow. Skills, task-splitting heuristics, and orchestration logic — installed via a single `/init-gsd` command.
+A multi-model development framework that combines Claude Code and Codex CLI into a unified, spec-driven workflow. Skills, task-splitting heuristics, worktree automation, Codex execution wrapper, and orchestration logic — installed via a single `bash install.sh` command and bootstrapped per-project with `/init-gsd`.
 
 ## Core Value
 
 Structured dual-tool workflow that eliminates per-session re-explanation and splits work by tool strengths automatically.
 
-## Current Milestone: v1.1 Execution-Side Integration
+## Current State
 
-**Goal:** Make the dual-tool workflow actually execute — worktree isolation, Codex runner, cross-review wiring, and a complete end-to-end demo.
+**Shipped:** v1.1 Execution-Side Integration (2026-03-03)
+**Total:** 6 phases, 14 plans, 77 files, 14,484 lines across 2 milestones
 
-**Target features:**
-- Worktree automation for parallel Codex execution
-- Codex execution wrapper (`bin/codex-task.sh`)
-- End-to-end demo of full workflow loop
-- Installer hardening with dependency checks
-- Global config templates for Claude and Codex
+The full dual-tool loop is proven end-to-end: bootstrap → plan → split → parallel Codex execution in worktree → merge → cross-review. All scripts have integration test suites.
 
 ## Requirements
 
@@ -27,27 +23,30 @@ Structured dual-tool workflow that eliminates per-session re-explanation and spl
 - ✓ `/codex-review` cross-model review with Codex invocation and severity reporting — v1.0
 - ✓ `/gsd-codex-verify` dual verification gate with JSONL parsing and structured reports — v1.0
 - ✓ Task-splitting heuristic with 4-signal analysis, type shortcuts, user overrides — v1.0
+- ✓ Installer hardening with pre-flight checks, integrity validation, ANSI output — v1.1
+- ✓ Global config templates for Claude and Codex (non-destructive install) — v1.1
+- ✓ Worktree automation for parallel Codex execution — v1.1
+- ✓ Codex execution wrapper with XML parsing, context injection, structured JSON output — v1.1
+- ✓ End-to-end demo proving full workflow loop — v1.1
 
 ### Active
 
-- [ ] Worktree automation for parallel Codex execution
-- [ ] Codex execution wrapper (`bin/codex-task.sh`)
-- [ ] End-to-end demo of full workflow loop
-- [ ] Installer hardening with dependency checks
-- [ ] Global config templates for Claude and Codex
+(None — planning next milestone)
 
 ### Out of Scope
 
 - Gemini, OpenCode, or other AI tool integration — Claude + Codex only
 - Mobile/web UI — CLI-first approach
 - Cloud hosting — local development tool
+- Real-time streaming from Codex — Codex CLI handles its own output
+- Custom model routing — fixed Claude/Codex split is sufficient
 
 ## Context
 
-Shipped v1.0 with planning-side integration complete: 3 production skills + task routing heuristic + plan checker validation. Execution-side (worktrees, Codex runner, cross-review wiring) deferred to v1.1.
+Two milestones shipped in 2 days. v1.0 delivered planning-side integration (3 skills + task routing). v1.1 delivered execution-side integration (installer hardening, worktree lifecycle, Codex runner, end-to-end demo).
 
-Tech stack: Claude Code skills (markdown), GSD agents (prompt engineering), Bash (install/worktree scripts).
-31 files, 7,173 lines added across 2 phases.
+Tech stack: Claude Code skills (markdown), GSD agents (prompt engineering), Bash (bin/ scripts, install, tests).
+Production code: 4,504 LOC across bin/, skills/, global/, rules/, install scripts.
 
 ## Key Decisions
 
@@ -57,7 +56,11 @@ Tech stack: Claude Code skills (markdown), GSD agents (prompt engineering), Bash
 | Conservative routing default (ambiguous → Claude) | ✓ Good — safer fallback |
 | Embed heuristic in planner prompt, not standalone module | ✓ Good — zero new dependencies |
 | Phase-gated validation (skip routing checks for Phase 1) | ✓ Good — backward compatible |
-| Severity tiering in plan checker (INFO/ISSUE/ERROR) | ✓ Good — non-blocking advisories |
+| Human-readable to stderr, JSON to stdout | ✓ Good — clean piping for all bin/ scripts |
+| Shell-only XML parsing with awk/grep/sed | ✓ Good — zero external dependencies |
+| Confidence routing: high=full-auto, medium=default, low=skip | ✓ Good — safe Codex invocation |
+| Temp file state sharing in demo (avoid subshell var loss) | ✓ Good — reliable inter-stage communication |
+| Simulated init-gsd in demo (skill not standalone script) | ✓ Good — pragmatic workaround |
 
 ## Constraints
 
@@ -71,7 +74,7 @@ Developers who use both Claude Code and Codex CLI and want a repeatable harness 
 
 ## Success Criteria
 
-End-to-end demo: `/init-gsd` → plan → auto-split → Codex builds in worktree → cross-review. Full loop without manual intervention beyond initial project decisions.
+✓ Achieved: End-to-end demo runs full loop without manual intervention — `/init-gsd` → plan → auto-split → Codex builds in worktree → cross-review. `bash bin/demo.sh` proves it in 7 stages.
 
 ---
-*Last updated: 2026-03-02 after v1.1 milestone start*
+*Last updated: 2026-03-03 after v1.1 milestone completion*

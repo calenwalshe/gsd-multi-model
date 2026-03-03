@@ -1,5 +1,21 @@
 # Milestones
 
+## v1.1 Execution-Side Integration (Shipped: 2026-03-03)
+
+**Phases completed:** 4 phases, 9 plans, 18 tasks
+**Timeline:** 2026-03-02 to 2026-03-03 (2 days)
+**Files changed:** 77 files, 14,484 lines added
+**Production code:** 4,504 LOC (bash)
+
+**Key accomplishments:**
+1. Hardened `install.sh` with pre-flight dependency checks, integrity validation, ANSI output, and `--force` flag
+2. Built worktree automation (`worktree-create.sh`, `worktree-cleanup.sh`, `worktree-list.sh`) for isolated parallel Codex execution with JSON output
+3. Created Codex execution wrapper (`codex-task.sh`) with shell-only XML parsing, confidence-based routing, structured JSON output, and exit code contract (0-4)
+4. Shipped end-to-end demo (`demo.sh`) proving full dual-tool workflow loop in 7 stages with dry-run/live modes
+5. Comprehensive test suites for all scripts: `test-install.sh`, `test-codex-task.sh`, `test-demo.sh` (37+ test cases total)
+
+---
+
 ## v1.0 Dual-Tool Framework MVP (Shipped: 2026-03-02)
 
 **Phases completed:** 2 phases, 5 plans, 6 tasks

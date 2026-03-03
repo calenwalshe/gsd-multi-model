@@ -1,0 +1,8 @@
+{
+  "name": "demo-project",
+  "version": "1.0.0",
+  "description": "GSD demo fixture project",
+  "scripts": {
+    "test": "node -e \"require('./src/utils.js'); console.log('ok')\""
+  }
+}
