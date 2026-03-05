@@ -268,7 +268,78 @@ paths:
 Security-sensitive file. Never commit secrets or API keys. Validate external input. Flag concerns during verification.
 ```
 
-## Step 6: Global Codex config (one-time)
+## Step 6: Create .claude/modes/ directory and mode files
+
+First, ensure the directory exists:
+
+```bash
+mkdir -p .claude/modes
+```
+
+### 6a. ideate.md
+
+**Idempotency check:** Use the Read tool to check if `.claude/modes/ideate.md` exists.
+
+- If exists AND `FORCE` is `false`: add to `skipped_files`. Skip.
+- Otherwise: create with the Write tool, add to `created_files`.
+
+Content:
+
+```markdown
+---
+description: "Brainstorm with full project context"
+skills: []
+rules: []
+---
+
+# Ideate Mode
+
+**Name:** Ideate
+**Description:** Brainstorm with full project context
+
+## Session Start
+
+Silently read these files (if they exist) — don't narrate, just internalize:
+- `.planning/PROJECT.md`
+- `.planning/MILESTONES.md`
+- `.planning/RETROSPECTIVE.md`
+- `.planning/STATE.md`
+
+Then greet briefly: "Context loaded. What are you thinking about?"
+
+If none of the files exist: "No project context found. We can brainstorm from scratch — what's the idea?"
+
+## Role
+
+You are a creative thinking partner who knows what the user has built, what worked, what didn't, and what's been deferred.
+
+- Explore ideas freely — no premature structure
+- Ask "what if" questions to expand thinking
+- Connect new ideas to existing project context (shipped features, known gaps, deferred work)
+- Challenge assumptions when useful
+- Keep the energy generative, not critical
+
+## What NOT To Do
+
+- No GSD commands (/status, /switch, /run, /execute)
+- No scaffolding or file creation
+- No project planning or phase breakdowns
+- Don't volunteer to build anything — this is thinking time
+
+## When Ideas Solidify
+
+When an idea feels ready to act on, suggest:
+
+"This sounds ready. Start a new session and run `/gsd:new-milestone` to turn it into a plan."
+
+Don't push this — only suggest when the user signals they want to move forward.
+
+## Mode Boundaries
+
+If a user types GSD commands: respond with "That's a GSD command. Start a new session in GSD mode to use it."
+```
+
+## Step 7: Global Codex config (one-time)
 
 ### 6a. Codex config.toml
 
@@ -341,7 +412,7 @@ You are an autonomous coder and cross-reviewer in a dual-tool workflow with Clau
 
   3. Add to `global_status` as "~/.codex/AGENTS.md: created".
 
-## Step 7: Global Claude preferences (one-time)
+## Step 8: Global Claude preferences (one-time)
 
 **Check existence:**
 
@@ -382,7 +453,7 @@ You are an autonomous coder and cross-reviewer in a dual-tool workflow with Clau
 
 3. Add to `global_status` as "~/.claude/CLAUDE.md: created".
 
-## Step 8: Install GSD framework
+## Step 9: Install GSD framework
 
 **Check if GSD is already installed:**
 
@@ -406,7 +477,7 @@ fi
      ```
      Continue with remaining steps (do not abort).
 
-## Step 9: Update .gitignore
+## Step 10: Update .gitignore
 
 1. Use the Read tool to check if `.gitignore` exists.
 2. If it does not exist, create it with the Write tool containing:
@@ -421,7 +492,7 @@ fi
 
 4. Add `.gitignore` to `created_files` (if new) or note "updated" (if appended).
 
-## Step 10: Print summary
+## Step 11: Print summary
 
 After all steps complete, print a formatted summary. Use the tracked lists to build the output:
 
@@ -436,6 +507,7 @@ Created:
     AGENTS.md              -- Universal instructions (Claude + Codex)
     CLAUDE.md              -- Claude workflow + GSD commands
     .claude/rules/         -- Auto-activating context rules (N files)
+    .claude/modes/         -- Session modes (N files)
 
 Skipped (already exist):
   [list each file from skipped_files, one per line]
