@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "addon_version": "1.2.0",
+  "gsd_compat": {
+    "min": "1.20.0",
+    "max": "1.99.99",
+    "tested": "1.22.4"
+  }
+}

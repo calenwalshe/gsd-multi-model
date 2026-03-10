@@ -1,6 +1,5 @@
 {
   "mode": "interactive",
-  "depth": "standard",
   "model_profile": "quality",
   "workflow": {
     "research": true,
@@ -16,5 +15,6 @@
       "phase": "gsd/m{milestone}-p{phase}",
       "milestone": "gsd/milestone-{milestone}"
     }
-  }
+  },
+  "granularity": "standard"
 }

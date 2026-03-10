@@ -39,6 +39,13 @@ WARNINGS=0
 ERRORS=0
 SKIPPED_FILES=()
 
+# --- GSD compatibility state ---
+GSD_VERSION=""
+GSD_COMPAT_STATUS=""        # "compatible" | "outside_range" | "not_found" | "invalid"
+GSD_COMPAT_MIN=""
+GSD_COMPAT_MAX=""
+GSD_COMPAT_TESTED=""
+
 ok()   { echo -e "${GREEN}  ✓${RESET} $1"; }
 warn() { echo -e "${YELLOW}  ⚠${RESET} $1"; WARNINGS=$((WARNINGS + 1)); }
 err()  { echo -e "${RED}  ✗${RESET} $1"; ERRORS=$((ERRORS + 1)); }
@@ -118,7 +125,75 @@ preflight_check() {
   echo ""
 }
 
+# --- Semver comparison (pure bash integer arithmetic) ---
+# Returns: -1 (a < b), 0 (a == b), 1 (a > b)
+# IFS is local -- does not affect caller
+semver_compare() {
+  local a="$1" b="$2"
+  local IFS=.
+  local a_parts=($a) b_parts=($b)
+  local a_major=${a_parts[0]:-0} a_minor=${a_parts[1]:-0} a_patch=${a_parts[2]:-0}
+  local b_major=${b_parts[0]:-0} b_minor=${b_parts[1]:-0} b_patch=${b_parts[2]:-0}
+
+  if (( a_major != b_major )); then
+    (( a_major > b_major )) && echo 1 || echo -1; return
+  fi
+  if (( a_minor != b_minor )); then
+    (( a_minor > b_minor )) && echo 1 || echo -1; return
+  fi
+  if (( a_patch != b_patch )); then
+    (( a_patch > b_patch )) && echo 1 || echo -1; return
+  fi
+  echo 0
+}
+
+# --- GSD compatibility check ---
+compat_check() {
+  local version_file="$HOME/.claude/get-shit-done/VERSION"
+  local compat_file="$SCRIPT_DIR/gsd-compat.json"
+
+  # Skip if VERSION file doesn't exist (GSD gets installed in step 5)
+  if [ ! -f "$version_file" ]; then
+    GSD_COMPAT_STATUS="not_found"
+    return
+  fi
+
+  # Read and validate VERSION
+  GSD_VERSION=$(cat "$version_file" | tr -d '[:space:]')
+  if ! [[ "$GSD_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+    warn "GSD VERSION file contains invalid format: $GSD_VERSION"
+    GSD_COMPAT_STATUS="invalid"
+    return
+  fi
+
+  # Read compat range from manifest (requires python3)
+  if ! command -v python3 &>/dev/null; then
+    GSD_COMPAT_STATUS="not_found"
+    return
+  fi
+
+  GSD_COMPAT_MIN=$(python3 -c "import json; print(json.load(open('$compat_file'))['gsd_compat']['min'])" 2>/dev/null) || { GSD_COMPAT_STATUS="invalid"; return; }
+  GSD_COMPAT_MAX=$(python3 -c "import json; print(json.load(open('$compat_file'))['gsd_compat']['max'])" 2>/dev/null) || { GSD_COMPAT_STATUS="invalid"; return; }
+  GSD_COMPAT_TESTED=$(python3 -c "import json; print(json.load(open('$compat_file'))['gsd_compat']['tested'])" 2>/dev/null) || { GSD_COMPAT_STATUS="invalid"; return; }
+
+  # Compare version against range
+  local cmp_min cmp_max
+  cmp_min=$(semver_compare "$GSD_VERSION" "$GSD_COMPAT_MIN")
+  cmp_max=$(semver_compare "$GSD_VERSION" "$GSD_COMPAT_MAX")
+
+  echo "==> Checking GSD compatibility..."
+  if (( cmp_min >= 0 && cmp_max <= 0 )); then
+    ok "GSD v${GSD_VERSION} -- compatible"
+    GSD_COMPAT_STATUS="compatible"
+  else
+    warn "GSD v${GSD_VERSION} outside tested range (${GSD_COMPAT_MIN}-${GSD_COMPAT_MAX}). Proceed with caution."
+    GSD_COMPAT_STATUS="outside_range"
+  fi
+  echo ""
+}
+
 preflight_check
+compat_check
 
 # --------------------------------------------------
 # 1. Install skills into ~/.claude/skills/ (personal = all projects)
@@ -328,7 +403,27 @@ done
 ok ".gitignore configured"
 
 # --------------------------------------------------
-# 6b. Verify installation integrity
+# 7. Install runner dependencies (optional)
+# --------------------------------------------------
+echo ""
+echo "==> Setting up GSD Runner (autonomous daemon)..."
+
+RUNNER_DIR="$SCRIPT_DIR/runner"
+if [ -d "$RUNNER_DIR" ]; then
+  if command -v npm &>/dev/null; then
+    echo "    Installing runner npm dependencies..."
+    (cd "$RUNNER_DIR" && npm install --silent 2>&1 | tail -3)
+    ok "Runner dependencies installed"
+    ok "Copy runner/.env.example to runner/.env and configure before running"
+  else
+    warn "npm not found -- skipping runner install. Run 'npm install' in runner/ manually."
+  fi
+else
+  ok "runner/ directory not found, skipping"
+fi
+
+# --------------------------------------------------
+# 7b. Verify installation integrity
 # --------------------------------------------------
 verify_integrity() {
   echo ""
@@ -427,7 +522,7 @@ verify_integrity() {
 verify_integrity
 
 # --------------------------------------------------
-# 7. Summary
+# 8. Summary
 # --------------------------------------------------
 echo ""
 echo "═══════════════════════════════════════════════════════"
@@ -448,6 +543,25 @@ echo " Global configs:"
 echo "   ~/.claude/CLAUDE.md     -- GSD dual-tool workflow"
 echo "   ~/.codex/AGENTS.md      -- Autonomous coder + cross-reviewer"
 echo "   ~/.codex/config.toml    -- Codex CLI settings"
+echo ""
+echo " Runner (autonomous daemon):"
+if [ -d "$SCRIPT_DIR/runner" ]; then
+  echo "   runner/                 -- gsd-runner TypeScript daemon"
+  echo "   runner/.env.example     -- copy to runner/.env and configure"
+  echo "   cd runner && npm run dev -- start the daemon"
+else
+  echo "   runner/ not found (optional)"
+fi
+echo ""
+if [ "$GSD_COMPAT_STATUS" = "compatible" ]; then
+  echo " GSD base: v${GSD_VERSION} (tested range: ${GSD_COMPAT_MIN} - ${GSD_COMPAT_MAX})"
+elif [ "$GSD_COMPAT_STATUS" = "outside_range" ]; then
+  echo " GSD base: v${GSD_VERSION} (WARNING: outside tested range ${GSD_COMPAT_MIN} - ${GSD_COMPAT_MAX})"
+elif [ "$GSD_COMPAT_STATUS" = "not_found" ]; then
+  echo " GSD base: not detected (will be installed in step 5)"
+elif [ "$GSD_COMPAT_STATUS" = "invalid" ]; then
+  echo " GSD base: version format invalid"
+fi
 echo ""
 echo " HOW TO USE (any new project):"
 echo "   1. mkdir my-project && cd my-project"

@@ -1,0 +1,26 @@
+{
+  "name": "gsd-runner",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Autonomous GSD project runner powered by Claude Agent SDK",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx src/index.ts",
+    "build": "tsup src/index.ts --format esm",
+    "test": "vitest run --reporter=verbose"
+  },
+  "dependencies": {
+    "@anthropic-ai/claude-agent-sdk": "^0.2.71",
+    "dotenv": "^16.4.0",
+    "grammy": "^1.41.1",
+    "pino": "^9.6.0",
+    "zod": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "tsup": "^8.0.0",
+    "tsx": "^4.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  }
+}
