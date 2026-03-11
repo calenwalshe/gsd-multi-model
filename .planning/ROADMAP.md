@@ -85,6 +85,12 @@ Plans:
 **Goal**: Executor agents can query real telemetry data instead of relying solely on source code and user-pasted context
 **Depends on**: Phase 02
 **Requirements**: OBSV-01, OBSV-02, OBSV-03
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Telemetry query orchestrator script, config schema, test suite
+- [ ] 04-02-PLAN.md — /gsd:debug skill, executor observe skill, test-install updates
+
 **Success Criteria** (what must be TRUE):
   1. `.planning/config.json` supports an `observability` section with endpoint configs (log sources, error trackers)
   2. `/gsd:debug` pulls real error logs from configured endpoints when available
@@ -109,5 +115,5 @@ Plans:
 | 01. The Orchestrator | 3/3 | Complete    | 2026-03-11 | - |
 | 02. Deterministic Gates | 3/3 | Complete    | 2026-03-11 | - |
 | 03. Entropy Management | 3/3 | Complete    | 2026-03-11 | - |
-| 04. Observability Integration | v2.0 | 0/? | Not started | - |
+| 04. Observability Integration | v2.0 | 0/2 | Planning complete | - |
 | 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |
