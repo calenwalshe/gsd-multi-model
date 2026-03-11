@@ -26,7 +26,7 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 
 - [ ] **ENTR-01**: Scheduled doc consistency check (do AGENTS.md conventions match actual code patterns?)
 - [ ] **ENTR-02**: Constraint violation scanning between milestones (architecture rules still hold?)
-- [ ] **ENTR-03**: Stale TODO/FIXME detection with age tracking
+- [x] **ENTR-03**: Stale TODO/FIXME detection with age tracking
 - [ ] **ENTR-04**: Configurable schedule via `.planning/config.json` (daily/weekly/on-push)
 
 ### Observability
@@ -79,7 +79,7 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 | GATE-04 | Phase 02 | Complete |
 | ENTR-01 | Phase 03 | Pending |
 | ENTR-02 | Phase 03 | Pending |
-| ENTR-03 | Phase 03 | Pending |
+| ENTR-03 | Phase 03 | Complete |
 | ENTR-04 | Phase 03 | Pending |
 | OBSV-01 | Phase 04 | Pending |
 | OBSV-02 | Phase 04 | Pending |
