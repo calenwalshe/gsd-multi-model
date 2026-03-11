@@ -23,7 +23,7 @@ See `.planning/milestones/` for archived roadmaps.
 
 - [x] **Phase 01: The Orchestrator** - Build `/gsd:drive` that auto-chains discuss → plan → execute → verify → advance with internal context resets (completed 2026-03-11)
 - [x] **Phase 02: Deterministic Gates** - Add pre-commit lint/test gates to execute phase and architectural constraint enforcement (completed 2026-03-11)
-- [ ] **Phase 03: Entropy Management** - Wire scheduled maintenance sweeps for doc consistency, constraint violations, and stale TODOs
+- [x] **Phase 03: Entropy Management** - Wire scheduled maintenance sweeps for doc consistency, constraint violations, and stale TODOs (completed 2026-03-11)
 - [ ] **Phase 04: Observability Integration** - Config format for telemetry endpoints, executor agent telemetry queries, debug log pulling
 - [ ] **Phase 05: NPM Publish & Distribution** - Publish `gsd-multi-model` to npm, version compat checks, clean GSD-base separation
 
@@ -68,7 +68,7 @@ Plans:
 **Goal**: Codebase entropy is detected and surfaced automatically between milestones, not discovered ad hoc
 **Depends on**: Phase 02
 **Requirements**: ENTR-01, ENTR-02, ENTR-03, ENTR-04
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 - [x] 03-01-PLAN.md — Sweep orchestrator, doc consistency checker, config schema
@@ -108,6 +108,6 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 01. The Orchestrator | 3/3 | Complete    | 2026-03-11 | - |
 | 02. Deterministic Gates | 3/3 | Complete    | 2026-03-11 | - |
-| 03. Entropy Management | 2/3 | In Progress | - | - |
+| 03. Entropy Management | 3/3 | Complete   | 2026-03-11 | - |
 | 04. Observability Integration | v2.0 | 0/? | Not started | - |
 | 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |
