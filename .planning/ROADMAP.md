@@ -88,7 +88,7 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 04-01-PLAN.md — Telemetry query orchestrator script, config schema, test suite
+- [x] 04-01-PLAN.md — Telemetry query orchestrator script, config schema, test suite
 - [ ] 04-02-PLAN.md — /gsd:debug skill, executor observe skill, test-install updates
 
 **Success Criteria** (what must be TRUE):
@@ -115,5 +115,5 @@ Plans:
 | 01. The Orchestrator | 3/3 | Complete    | 2026-03-11 | - |
 | 02. Deterministic Gates | 3/3 | Complete    | 2026-03-11 | - |
 | 03. Entropy Management | 3/3 | Complete    | 2026-03-11 | - |
-| 04. Observability Integration | v2.0 | 0/2 | Planning complete | - |
+| 04. Observability Integration | v2.0 | 1/2 | In progress | - |
 | 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |

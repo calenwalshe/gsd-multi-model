@@ -31,7 +31,7 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 
 ### Observability
 
-- [ ] **OBSV-01**: `.planning/config.json` supports observability endpoint config (log sources, error trackers)
+- [x] **OBSV-01**: `.planning/config.json` supports observability endpoint config (log sources, error trackers)
 - [ ] **OBSV-02**: `/gsd:debug` can pull real error logs from configured endpoints
 - [ ] **OBSV-03**: Executor agents query telemetry before/after changes when endpoints are configured
 
@@ -81,7 +81,7 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 | ENTR-02 | Phase 03 | Complete |
 | ENTR-03 | Phase 03 | Complete |
 | ENTR-04 | Phase 03 | Complete |
-| OBSV-01 | Phase 04 | Pending |
+| OBSV-01 | Phase 04 | Complete |
 | OBSV-02 | Phase 04 | Pending |
 | OBSV-03 | Phase 04 | Pending |
 | DIST-01 | Phase 05 | Pending |

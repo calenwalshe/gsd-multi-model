@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Harness Engineering
-status: completed
-stopped_at: Completed 03-03-PLAN.md
-last_updated: "2026-03-11T19:07:43.734Z"
-last_activity: 2026-03-11 -- Completed 03-03 (entropy test suites)
+status: in-progress
+stopped_at: Completed 04-01-PLAN.md
+last_updated: "2026-03-11T19:20:13Z"
+last_activity: 2026-03-11 -- Completed 04-01 (telemetry query orchestrator)
 progress:
   total_phases: 5
   completed_phases: 3
-  total_plans: 9
-  completed_plans: 9
-  percent: 100
+  total_plans: 11
+  completed_plans: 10
+  percent: 91
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-11)
 
 **Core value:** Structured dual-tool workflow that drives itself through the full loop with deterministic quality gates
-**Current focus:** Phase 03 - Entropy Management (Complete)
+**Current focus:** Phase 04 - Observability Integration (In Progress)
 
 ## Current Position
 
-Phase: 03 of 05 (Entropy Management) -- COMPLETE
-Plan: 3 of 3 in current phase (03-01, 03-02, 03-03 complete)
-Status: Phase 03 Complete
-Last activity: 2026-03-11 -- Completed 03-03 (entropy test suites)
+Phase: 04 of 05 (Observability Integration) -- IN PROGRESS
+Plan: 1 of 2 in current phase (04-01 complete)
+Status: Executing Phase 04
+Last activity: 2026-03-11 -- Completed 04-01 (telemetry query orchestrator)
 
-Progress: [██████████] 100%
+Progress: [█████████░] 91%
 
 ## Performance Metrics
 
@@ -63,6 +63,7 @@ Progress: [██████████] 100%
 | Phase 03 P01 | 5min | 2 tasks | 3 files |
 | Phase 03 P02 | 2min | 1 tasks | 2 files |
 | Phase 03 P03 | 4min | 2 tasks | 2 files |
+| Phase 04 P01 | 4min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -90,6 +91,9 @@ Recent decisions affecting current work:
 - [Phase 03]: Warning-severity findings fail checks; info-severity findings do not
 - [Phase 03]: Architecture entropy check reuses validate-architecture.sh with full project file list
 - [Phase 03]: Test fixtures run checker from original path with --project-root to avoid self-detection
+- [Phase 04]: Env var substitution via bash regex loop (not sed) for portability
+- [Phase 04]: Health check mode uses lightweight probes (file -f, curl --head, docker inspect)
+- [Phase 04]: Unreachable endpoints produce warnings with empty results, never hard failure
 
 ### Pending Todos
 
@@ -101,6 +105,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-11T19:03:50.333Z
-Stopped at: Completed 03-03-PLAN.md
+Last session: 2026-03-11T19:20:13Z
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None
