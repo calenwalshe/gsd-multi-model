@@ -1,0 +1,27 @@
+{
+  "name": "gsd-multi-model",
+  "version": "1.3.0",
+  "description": "Multi-model add-on for GSD — installs Claude Code skills for dual-tool (Claude + Codex) workflow",
+  "bin": {
+    "gsd-multi-model": "./bin/cli.sh"
+  },
+  "files": [
+    "bin/cli.sh",
+    "skills/",
+    "global/",
+    "rules/",
+    "gsd-compat.json"
+  ],
+  "keywords": [
+    "gsd",
+    "claude-code",
+    "codex",
+    "multi-model",
+    "ai-workflow"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/calenwalshe/gsd-multi-model"
+  }
+}
