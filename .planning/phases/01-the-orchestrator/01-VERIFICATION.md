@@ -1,46 +1,46 @@
 ---
 phase: 01-the-orchestrator
-verified: 2026-03-11T07:40:22Z
-status: gaps_found
-score: 6/8 must-haves verified
-re_verification: false
-gaps:
-  - truth: "/gsd:drive dispatches to existing skills (discuss, plan, execute, verify, transition) via Skill() calls"
-    status: partial
-    reason: "drive-workflow.md dispatches discuss-phase with '--auto' flag (line 134), but Plan 02 removed --auto handling from discuss-phase.md. The flag is passed but silently ignored, causing discuss to run in interactive mode rather than auto-answer mode."
-    artifacts:
-      - path: "skills/gsd-drive/drive-workflow.md"
-        issue: "Line 134: Skill(skill=\"gsd:discuss-phase\", args=\"${PHASE} --auto\") — --auto is a dead argument; discuss-phase no longer processes it"
-      - path: "~/.claude/get-shit-done/workflows/discuss-phase.md"
-        issue: "No --auto argument parsing exists; the flag is silently ignored"
-    missing:
-      - "Either restore --auto handling in discuss-phase.md for auto-answer mode, or update drive-workflow.md to dispatch without --auto and rely on /gsd:drive context being passed another way"
-  - truth: "/gsd:drive pauses only when external user action is needed"
-    status: partial
-    reason: "Because discuss-phase receives --auto but cannot act on it, discuss will run interactively and pause for user input on every /gsd:drive invocation that hits a phase without a CONTEXT.md. This contradicts the autonomous chaining goal."
-    artifacts:
-      - path: "skills/gsd-drive/drive-workflow.md"
-        issue: "Autonomous dispatch of discuss is broken — --auto stripped from receiving skill but not from dispatch call"
-    missing:
-      - "Auto-answer mechanism for discuss-phase under /gsd:drive — either via resurrected --auto support or a separate auto-discuss skill"
+verified: 2026-03-11T08:15:00Z
+status: human_needed
+score: 8/8 must-haves verified
+re_verification: true
+  previous_status: gaps_found
+  previous_score: 6/8
+  gaps_closed:
+    - "/gsd:drive dispatches to existing skills (discuss, plan, execute, verify, transition) via Skill() calls"
+    - "/gsd:drive pauses only when external user action is needed"
+  gaps_remaining: []
+  regressions: []
 human_verification:
   - test: "Run /gsd:drive on a project with no CONTEXT.md (fresh phase)"
-    expected: "Discuss phase completes without prompting user for input; orchestrator continues to plan automatically"
-    why_human: "Cannot verify interactive behavior of discuss-phase programmatically; need to observe actual prompting behavior in a Claude Code session"
+    expected: "Drive generates a minimal CONTEXT.md inline without prompting user; orchestrator continues to plan automatically"
+    why_human: "Cannot verify that the inline CONTEXT.md generation produces a file acceptable to plan-phase, nor that no interactive pause occurs"
   - test: "Run /gsd:drive --phase 2 on a project where phase 1 is incomplete"
     expected: "Orchestrator detects phase 1 prerequisite, drives phases 1 then 2 sequentially"
     why_human: "Prerequisite-prepend logic in Section 1 requires live STATE.md and ROADMAP.md to trace"
   - test: "Simulate verification failure twice, then succeed on third attempt"
     expected: "Drive log shows FAIL (retry 1), FAIL (retry 2), then success; NOT a third retry"
-    why_human: "Retry boundary uses <= 2 in Section 7 but < 2 in decision table (inconsistency); actual runtime behavior unclear"
+    why_human: "Section 7 has a missing case at VERIFY_RETRIES == 2 (neither < 2 nor > 2 matches); actual runtime behavior is ambiguous"
 ---
 
 # Phase 01: The Orchestrator Verification Report
 
 **Phase Goal:** Users run `/gsd:drive` and the system chains through discuss -> plan -> execute -> verify -> advance without manual `/clear` + next-command sequences
-**Verified:** 2026-03-11T07:40:22Z
-**Status:** gaps_found — 2 gaps blocking full autonomous chaining
-**Re-verification:** No — initial verification
+**Verified:** 2026-03-11T08:15:00Z
+**Status:** human_needed — all automated checks pass; 3 items require human observation
+**Re-verification:** Yes — after gap closure (inline CONTEXT.md generation replaces discuss-phase dispatch)
+
+---
+
+## Re-verification Summary
+
+| Item | Previous | Now | Change |
+|------|----------|-----|--------|
+| Gap 1: dead --auto flag in discuss dispatch | PARTIAL | CLOSED | discuss-phase no longer dispatched at all |
+| Gap 2: discuss running interactively | PARTIAL | CLOSED | Inline CONTEXT.md generation avoids any interactive pause |
+| Warning: retry boundary inconsistency | WARNING | REMAINS | Section 7 still has missing case at VERIFY_RETRIES == 2 |
+
+---
 
 ## Goal Achievement
 
@@ -48,16 +48,34 @@ human_verification:
 
 | # | Truth | Status | Evidence |
 |---|-------|--------|----------|
-| 1 | `/gsd:drive` reads STATE.md and determines the correct next workflow step | VERIFIED | drive-workflow.md Section 3 uses `gsd-tools.cjs state` + artifact ls checks; decision table routes all 9 conditions correctly |
-| 2 | `/gsd:drive` dispatches to existing skills via Skill() calls | PARTIAL | Skill() dispatch exists for all 7 action types (discuss, research, plan, execute, execute-gaps, verify, transition); however discuss dispatches with dead `--auto` flag |
+| 1 | `/gsd:drive` reads STATE.md and determines the correct next workflow step | VERIFIED | Section 3 reads `gsd-tools.cjs state` + artifact ls checks; decision table routes all 9 conditions correctly |
+| 2 | `/gsd:drive` dispatches to existing skills via Skill() calls | VERIFIED | discuss-phase is no longer dispatched; CONTEXT.md generated inline. All other 6 dispatch types (research, plan, execute, execute-gaps, verify, transition) use Skill() calls. No dead --auto flag. |
 | 3 | `/gsd:drive` skips completed steps by checking artifact existence | VERIFIED | Section 3 checks CONTEXT_EXISTS, PLAN_COUNT, SUMMARY_COUNT, VERIFICATION_EXISTS, UAT_EXISTS from disk on every iteration |
 | 4 | `/gsd:drive` resumes from correct position after interruption | VERIFIED | Section 6 calls `gsd-tools.cjs state record-session`; Section 1 auto mode reads STATE.md current position; drive loop re-reads disk at every iteration |
 | 5 | `/gsd:drive --phase N` and `--to N` flags route to correct phases | VERIFIED | SKILL.md Step 1 parses both flags; Section 1 of drive-workflow.md implements auto/single/range mode resolution with prerequisite prepending |
-| 6 | `/gsd:drive` pauses only when external user action is needed | PARTIAL | Pause rules are correct (Section 6: only on checkpoint:human-action or 2-retry exhaustion); BUT discuss-phase will pause for user input on every invocation since --auto flag is ignored — breaking autonomous chaining |
+| 6 | `/gsd:drive` pauses only when external user action is needed | VERIFIED | Pause rules correct (Section 6: checkpoint:human-action or 2-retry exhaustion only); discuss phase now generates CONTEXT.md inline without any interactive prompt |
 | 7 | `/gsd:drive` auto-advances across phase boundaries | VERIFIED | Section 8 increments PHASES_COMPLETED, loops to next phase, resets counters; cross-phase state re-read from disk |
-| 8 | `/gsd:drive` retries verification failures up to 2 times then stops | VERIFIED (with warning) | Section 7 and decision table row 7/8 implement retry logic; minor inconsistency: decision table uses `VERIFY_RETRIES < 2` (2 retries max) but Section 7 uses `<= 2` (potentially 3 retries); intent is 2 retries, decision table is authoritative |
+| 8 | `/gsd:drive` retries verification failures up to 2 times then stops | VERIFIED (with warning) | Decision table rows 7/8 use `< 2` and `>= 2` correctly; Section 7 prose uses `< 2` and `> 2`, leaving VERIFY_RETRIES == 2 unhandled (neither branch matches) |
 
-**Score:** 6/8 truths verified (2 partial)
+**Score:** 8/8 truths verified
+
+---
+
+## Gap Closure Evidence
+
+### Gap 1 (closed): dead --auto discuss dispatch
+
+**Previous state:** drive-workflow.md line 134 contained `Skill(skill="gsd:discuss-phase", args="${PHASE} --auto")` — the `--auto` flag was silently ignored by discuss-phase.
+
+**Current state:** The `discuss` action in Section 4 no longer calls discuss-phase at all. Instead it generates a minimal CONTEXT.md inline using `gsd-tools.cjs roadmap get-phase` for the phase description, then writes the file directly with all decisions marked as "Claude's Discretion". No Skill() dispatch, no user interaction possible.
+
+**Verification:** `grep --auto skills/gsd-drive/drive-workflow.md` returns no matches. The discuss section (lines 131-192) describes an inline Write operation, not a Skill() call.
+
+### Gap 2 (closed): discuss running interactively on every /gsd:drive invocation
+
+**Previous state:** Because --auto was ignored, discuss-phase would run in full interactive mode whenever a phase had no CONTEXT.md, prompting for user input and halting autonomous chaining.
+
+**Current state:** The inline CONTEXT.md generation (drive-workflow.md Section 4, discuss action) writes the file directly. No skill is invoked, no interactive session starts, no user input is solicited. The orchestrator continues to plan-phase on the next loop iteration.
 
 ---
 
@@ -65,15 +83,14 @@ human_verification:
 
 | Artifact | Expected | Status | Details |
 |----------|----------|--------|---------|
-| `skills/gsd-drive/SKILL.md` | Main orchestrator skill entry point | VERIFIED | 112 lines (under 150 limit); valid frontmatter `name: gsd-drive`; argument parsing, env validation, drive state init, workflow reference, final summary — all present |
-| `skills/gsd-drive/drive-workflow.md` | State machine, dispatch, error handling | VERIFIED | 334 lines; all 8 sections present: target phase resolution, drive loop, next-action determination, Skill() dispatch, drive log, pause detection, verification retry, cross-phase advance |
-| `global/workflows/discuss-phase.md` | Discuss phase without --auto sections | VERIFIED | HTML comment at line 589; no live --auto code |
-| `global/workflows/plan-phase.md` | Plan phase without --auto sections | VERIFIED | No --auto references |
-| `global/workflows/execute-phase.md` | Execute phase without --auto sections | VERIFIED | No --auto references |
-| `global/workflows/transition.md` | Transition without --auto chaining, yolo routes to /gsd:drive | VERIFIED | 4 gsd:drive references; _auto_chain_active replaced with HTML comment at line 454 |
-| `bin/cli.sh` | Installation of gsd-drive skill | VERIFIED | Skills loop `for skill_dir in "$SCRIPT_DIR/skills"/*/` at line 121 auto-discovers gsd-drive; no explicit naming needed |
-| `test-install.sh` | Verification that gsd-drive is installed correctly | VERIFIED | Lines 49-50 explicitly check `~/.claude/skills/gsd-drive/SKILL.md` and `~/.claude/skills/gsd-drive/drive-workflow.md` |
-| `skills/init-gsd/SKILL.md` | Updated bootstrapper references /gsd:drive | VERIFIED | Line 528 references `/gsd:drive` as auto-chaining entry point |
+| `skills/gsd-drive/SKILL.md` | Main orchestrator skill entry point | VERIFIED | 113 lines; valid frontmatter `name: gsd-drive`; argument parsing, env validation, drive state init, workflow reference, final summary all present |
+| `skills/gsd-drive/drive-workflow.md` | State machine, dispatch, error handling | VERIFIED | 390 lines; all 8 sections present including inline CONTEXT.md generation in Section 4 discuss action |
+| `global/workflows/discuss-phase.md` | Discuss phase without --auto sections | VERIFIED (no regression) | No --auto code |
+| `global/workflows/plan-phase.md` | Plan phase without --auto sections | VERIFIED (no regression) | No --auto references |
+| `global/workflows/execute-phase.md` | Execute phase without --auto sections | VERIFIED (no regression) | No --auto references |
+| `global/workflows/transition.md` | Transition recommends /gsd:drive for yolo mode | VERIFIED (no regression) | 4 gsd:drive references at lines 371, 381, 392, 454 |
+| `bin/cli.sh` | Installation of gsd-drive skill | VERIFIED (no regression) | Skills loop `for skill_dir in "$SCRIPT_DIR/skills"/*/` at line 121 auto-discovers gsd-drive |
+| `test-install.sh` | Verification that gsd-drive is installed | VERIFIED (no regression) | Lines 49-50 check `~/.claude/skills/gsd-drive/SKILL.md` and `~/.claude/skills/gsd-drive/drive-workflow.md` |
 
 ---
 
@@ -82,11 +99,12 @@ human_verification:
 | From | To | Via | Status | Details |
 |------|----|-----|--------|---------|
 | `skills/gsd-drive/SKILL.md` | `skills/gsd-drive/drive-workflow.md` | `@skills/gsd-drive/drive-workflow.md` reference | WIRED | Line 74 of SKILL.md contains exact @-reference |
-| `skills/gsd-drive/SKILL.md` | `gsd-tools.cjs` | Bash calls for state parsing | WIRED | Lines 61-67 and 111 reference `$HOME/.claude/get-shit-done/bin/gsd-tools.cjs`; file confirmed present |
-| `skills/gsd-drive/drive-workflow.md` | existing workflow skills | Skill() dispatch calls | PARTIAL | Skill() calls exist for all 7 types; discuss dispatch passes dead `--auto` flag breaking auto-answer mode |
-| `bin/cli.sh` | `skills/gsd-drive/SKILL.md` | `skills/*/` wildcard loop | WIRED | Loop at line 121 covers all subdirectories including gsd-drive |
-| `test-install.sh` | `~/.claude/skills/gsd-drive/SKILL.md` | file existence check | WIRED | Lines 49-50 verify both SKILL.md and drive-workflow.md |
-| `global/workflows/transition.md` | `/gsd:drive` | yolo mode recommendation | WIRED | 4 references to gsd:drive in transition.md |
+| `skills/gsd-drive/SKILL.md` | `gsd-tools.cjs` | Bash calls for state parsing | WIRED | Lines 61-67 and 111 reference `$HOME/.claude/get-shit-done/bin/gsd-tools.cjs` |
+| `skills/gsd-drive/drive-workflow.md` | plan/execute/verify/transition skills | Skill() dispatch calls | WIRED | Skill() calls exist for research, plan, execute, execute-gaps, verify, and transition. discuss handled inline — no broken dispatch. |
+| `skills/gsd-drive/drive-workflow.md` | CONTEXT.md (inline) | Direct Write from roadmap get-phase | WIRED | Section 4 discuss action reads roadmap via gsd-tools.cjs and writes CONTEXT.md directly |
+| `bin/cli.sh` | `skills/gsd-drive/SKILL.md` | `skills/*/` wildcard loop | WIRED | Line 121 covers all skill subdirectories |
+| `test-install.sh` | `~/.claude/skills/gsd-drive/SKILL.md` | file existence check | WIRED | Lines 49-50 verify both skill files |
+| `global/workflows/transition.md` | `/gsd:drive` | yolo mode recommendation | WIRED | 4 references |
 
 ---
 
@@ -94,13 +112,13 @@ human_verification:
 
 | Requirement | Source Plan | Description | Status | Evidence |
 |-------------|------------|-------------|--------|----------|
-| ORCH-01 | 01-01, 01-02, 01-03 | `/gsd:drive` auto-chains discuss -> plan -> execute -> verify -> advance | PARTIAL | Drive loop, Skill() dispatch, and phase advance are wired; discuss dispatch broken via dead --auto flag (may block fully autonomous chain) |
-| ORCH-02 | 01-01 | Orchestrator handles context resets between phases (no manual /clear) | VERIFIED | drive-workflow.md Section 2 drives loop continuously; Section 8 handles cross-phase advance without user intervention; no /clear references |
-| ORCH-03 | 01-01 | Orchestrator pauses only on genuine decision points | PARTIAL | Pause rules correct; however discuss-phase running interactively under drive is an unintended pause trigger |
-| ORCH-04 | 01-01, 01-03 | Orchestrator reads STATE.md to resume from any position | VERIFIED | `gsd-tools.cjs state` used in Section 1 auto mode and Section 5 drive log; `record-session` called on pause |
-| ORCH-05 | 01-01 | Orchestrator supports `--phase N` and `--to N` flags | VERIFIED | Both flags parsed in SKILL.md Step 1; Section 1 implements all three modes with prerequisite detection |
+| ORCH-01 | 01-01, 01-02, 01-03 | `/gsd:drive` auto-chains discuss -> plan -> execute -> verify -> advance | SATISFIED | Drive loop with inline CONTEXT.md generation removes last broken link in chain; all 6 Skill() dispatches wired correctly |
+| ORCH-02 | 01-01 | Orchestrator handles context resets between phases (no manual /clear) | SATISFIED | drive-workflow.md Section 2 drives loop continuously; Section 8 handles cross-phase advance; no /clear references anywhere |
+| ORCH-03 | 01-01 | Orchestrator pauses only on genuine decision points | SATISFIED | Pause rules in Section 6 restricted to checkpoint:human-action or 2-retry exhaustion; inline CONTEXT.md generation eliminates the spurious pause from discuss-phase |
+| ORCH-04 | 01-01, 01-03 | Orchestrator reads STATE.md to resume from any position | SATISFIED | `gsd-tools.cjs state` used in Section 1 auto mode and Section 5 drive log; `record-session` called on pause |
+| ORCH-05 | 01-01 | Orchestrator supports `--phase N` and `--to N` flags | SATISFIED | Both flags parsed in SKILL.md Step 1; Section 1 implements auto/single/range modes with prerequisite detection |
 
-All 5 requirement IDs from plans accounted for. No orphaned requirements found (REQUIREMENTS.md maps ORCH-01 through ORCH-05 to Phase 01 and all are claimed by plans).
+All 5 requirement IDs from plans accounted for. No orphaned requirements. REQUIREMENTS.md maps ORCH-01 through ORCH-05 to Phase 01 and all are claimed by plans.
 
 ---
 
@@ -108,44 +126,48 @@ All 5 requirement IDs from plans accounted for. No orphaned requirements found (
 
 | File | Line | Pattern | Severity | Impact |
 |------|------|---------|----------|--------|
-| `skills/gsd-drive/drive-workflow.md` | 134 | `Skill(skill="gsd:discuss-phase", args="${PHASE} --auto")` — --auto is dead | Blocker | discuss runs interactively, breaking autonomous chaining |
-| `skills/gsd-drive/drive-workflow.md` | 292 vs 116 | `VERIFY_RETRIES <= 2` (Section 7) vs `VERIFY_RETRIES < 2` (decision table) | Warning | Inconsistent retry boundary; may allow 3 retries instead of 2 depending on code path taken |
+| `skills/gsd-drive/drive-workflow.md` | 347, 352 | Section 7: `VERIFY_RETRIES < 2` (retry) and `VERIFY_RETRIES > 2` (stop) — the `== 2` case is not handled by either branch | Warning | At exactly 2 retries, neither condition matches; runtime behavior depends on LLM interpretation. Decision table (line 117: `>= 2` stops) is correct and should be authoritative. |
+
+No blocker anti-patterns. The dead `--auto` flag (previous blocker) is fully removed.
 
 ---
 
 ## Human Verification Required
 
-### 1. Discuss-phase interactive pause check
+### 1. Inline CONTEXT.md generation and plan-phase acceptance
 
-**Test:** On a project with no CONTEXT.md, run `/gsd:drive` in a Claude Code session.
-**Expected:** Discuss phase completes without prompting user; orchestrator continues to plan automatically.
-**Why human:** Cannot verify interactive vs non-interactive behavior programmatically; must observe whether discuss-phase prompts for user input when invoked by /gsd:drive.
+**Test:** On a project with no CONTEXT.md for the current phase, run `/gsd:drive` in a Claude Code session.
+**Expected:** Drive writes a minimal CONTEXT.md inline (without user prompts), then immediately proceeds to plan-phase. Plan-phase accepts the auto-generated CONTEXT.md as sufficient input and produces PLAN.md files.
+**Why human:** Cannot verify programmatically that (a) no interactive pause occurs during the Write step, (b) the generated CONTEXT.md satisfies plan-phase's validation, or (c) plan-phase proceeds rather than re-requesting discuss.
 
 ### 2. --phase N prerequisite prepend
 
 **Test:** Run `/gsd:drive --phase 3` on a project where phases 1 and 2 are incomplete.
-**Expected:** Orchestrator drives phases 1, 2, and 3 in sequence.
-**Why human:** Section 1 single mode logic requires live STATE.md and ROADMAP.md to trace; cannot mock prerequisite detection with grep.
+**Expected:** Orchestrator drives phases 1, 2, and 3 in sequence automatically.
+**Why human:** Section 1 single-mode prerequisite logic requires live STATE.md and ROADMAP.md; cannot mock prerequisite detection with grep alone.
 
-### 3. Verification retry boundary
+### 3. Verification retry at boundary (VERIFY_RETRIES == 2)
 
-**Test:** Arrange two consecutive verification failures on a phase, then a passing verification.
-**Expected:** Drive log shows "FAIL (retry 1)", "FAIL (retry 2)", then success — not a third retry attempt.
-**Why human:** Decision table (`< 2`) and Section 7 (`<= 2`) disagree; actual runtime behavior of an LLM following these instructions requires observation.
-
----
-
-## Gaps Summary
-
-Two related gaps share a root cause: **Plan 01-01 created the orchestrator dispatching `--auto` to discuss-phase; Plan 01-02 removed `--auto` handling from discuss-phase without updating the dispatch call in drive-workflow.md.**
-
-This creates a broken link: `/gsd:drive` passes `--auto` to `discuss-phase`, but discuss-phase ignores unknown arguments and runs in interactive mode. Every `/gsd:drive` invocation that encounters a phase without a CONTEXT.md will pause waiting for user input — directly defeating the phase goal of eliminating manual sequences.
-
-The fix is straightforward: either (a) update drive-workflow.md line 134 to dispatch without `--auto` and ensure discuss behaves autonomously in another way, or (b) restore a minimal `--auto` handler in discuss-phase that skips interactive questions and uses defaults.
-
-A secondary warning: the retry boundary inconsistency between the decision table (`VERIFY_RETRIES < 2`) and Section 7 prose (`VERIFY_RETRIES <= 2`) could lead to 3 retries instead of the specified 2. This does not break the feature but violates the spec — the decision table should be authoritative.
+**Test:** Arrange exactly two consecutive verification failures on a phase, then a passing verification.
+**Expected:** Drive log shows "FAIL (retry 1)", "FAIL (retry 2)", then success — with no third retry attempt.
+**Why human:** Section 7 prose has a missing case at `VERIFY_RETRIES == 2` (neither `< 2` nor `> 2` matches); actual LLM runtime behavior when hitting this gap is not verifiable via static analysis. Decision table at line 117 says `>= 2` stops — LLM should follow the table, but this needs observation to confirm.
 
 ---
 
-_Verified: 2026-03-11T07:40:22Z_
+## Overall Assessment
+
+The two blockers from the initial verification are resolved:
+
+1. **Discuss dispatch with dead --auto flag** — eliminated by replacing the Skill() dispatch with inline CONTEXT.md generation. The approach is clean: `/gsd:drive` writes a minimal context with all decisions marked as Claude's discretion, avoiding any interactive session with discuss-phase entirely.
+
+2. **discuss-phase pausing for user input** — resolved as a consequence of gap 1's fix. No discuss-phase invocation means no interactive pause.
+
+One pre-existing warning remains: Section 7 prose has a gap at `VERIFY_RETRIES == 2` where neither the retry branch (`< 2`) nor the stop branch (`> 2`) fires. This is not a blocker because the decision table at line 117 correctly specifies `>= 2` as the stop condition, and the decision table is authoritative per the anti-patterns list. The discrepancy should be corrected to `>= 2` in Section 7 prose to match, but this does not prevent the feature from working.
+
+Automated verification passes on all 8 truths and all 5 requirements. Three items require human observation before the phase can be fully signed off.
+
+---
+
+_Verified: 2026-03-11T08:15:00Z_
 _Verifier: Claude (gsd-verifier)_
+_Re-verification: Yes — after gap closure for discuss dispatch and autonomous pause behavior_
