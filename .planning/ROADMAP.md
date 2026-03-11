@@ -24,7 +24,7 @@ See `.planning/milestones/` for archived roadmaps.
 - [x] **Phase 01: The Orchestrator** - Build `/gsd:drive` that auto-chains discuss → plan → execute → verify → advance with internal context resets (completed 2026-03-11)
 - [x] **Phase 02: Deterministic Gates** - Add pre-commit lint/test gates to execute phase and architectural constraint enforcement (completed 2026-03-11)
 - [x] **Phase 03: Entropy Management** - Wire scheduled maintenance sweeps for doc consistency, constraint violations, and stale TODOs (completed 2026-03-11)
-- [ ] **Phase 04: Observability Integration** - Config format for telemetry endpoints, executor agent telemetry queries, debug log pulling
+- [x] **Phase 04: Observability Integration** - Config format for telemetry endpoints, executor agent telemetry queries, debug log pulling (completed 2026-03-11)
 - [ ] **Phase 05: NPM Publish & Distribution** - Publish `gsd-multi-model` to npm, version compat checks, clean GSD-base separation
 
 ## Phase Details
@@ -85,7 +85,7 @@ Plans:
 **Goal**: Executor agents can query real telemetry data instead of relying solely on source code and user-pasted context
 **Depends on**: Phase 02
 **Requirements**: OBSV-01, OBSV-02, OBSV-03
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 Plans:
 - [x] 04-01-PLAN.md — Telemetry query orchestrator script, config schema, test suite
@@ -115,5 +115,5 @@ Plans:
 | 01. The Orchestrator | 3/3 | Complete    | 2026-03-11 | - |
 | 02. Deterministic Gates | 3/3 | Complete    | 2026-03-11 | - |
 | 03. Entropy Management | 3/3 | Complete    | 2026-03-11 | - |
-| 04. Observability Integration | v2.0 | 1/2 | In progress | - |
+| 04. Observability Integration | 2/2 | Complete   | 2026-03-11 | - |
 | 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |
