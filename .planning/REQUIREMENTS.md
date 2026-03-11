@@ -9,11 +9,11 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 
 ### Orchestration
 
-- [ ] **ORCH-01**: `/gsd:drive` auto-chains discuss → plan → execute → verify → advance for a given phase
-- [ ] **ORCH-02**: Orchestrator handles context resets between phases internally (no manual `/clear`)
-- [ ] **ORCH-03**: Orchestrator pauses only on genuine decision points (ambiguous requirements, verification failures, user input needed)
-- [ ] **ORCH-04**: Orchestrator reads STATE.md to resume from any position after interruption
-- [ ] **ORCH-05**: Orchestrator supports `--phase N` to target a specific phase and `--to N` to drive through a range
+- [x] **ORCH-01**: `/gsd:drive` auto-chains discuss → plan → execute → verify → advance for a given phase
+- [x] **ORCH-02**: Orchestrator handles context resets between phases internally (no manual `/clear`)
+- [x] **ORCH-03**: Orchestrator pauses only on genuine decision points (ambiguous requirements, verification failures, user input needed)
+- [x] **ORCH-04**: Orchestrator reads STATE.md to resume from any position after interruption
+- [x] **ORCH-05**: Orchestrator supports `--phase N` to target a specific phase and `--to N` to drive through a range
 
 ### Deterministic Gates
 
@@ -68,11 +68,11 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| ORCH-01 | Phase 01 | Pending |
-| ORCH-02 | Phase 01 | Pending |
-| ORCH-03 | Phase 01 | Pending |
-| ORCH-04 | Phase 01 | Pending |
-| ORCH-05 | Phase 01 | Pending |
+| ORCH-01 | Phase 01 | Complete |
+| ORCH-02 | Phase 01 | Complete |
+| ORCH-03 | Phase 01 | Complete |
+| ORCH-04 | Phase 01 | Complete |
+| ORCH-05 | Phase 01 | Complete |
 | GATE-01 | Phase 02 | Pending |
 | GATE-02 | Phase 02 | Pending |
 | GATE-03 | Phase 02 | Pending |
