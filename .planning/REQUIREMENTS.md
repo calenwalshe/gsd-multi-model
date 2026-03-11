@@ -1,65 +1,99 @@
 # Requirements: gsd-multi-model
 
-**Defined:** 2026-03-08
-**Core Value:** Structured dual-tool workflow that splits work by tool strengths automatically
+**Defined:** 2026-03-11
+**Core Value:** Structured dual-tool workflow that drives itself through the full loop with deterministic quality gates
 
-## v1.3 Requirements
+## v2.0 Requirements
 
-Requirements for Safe Local-First Install. Each maps to roadmap phases.
+Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 
-### Install
+### Orchestration
 
-- [ ] **INST-01**: `/init-gsd` creates project-local `CLAUDE.md` with dual-tool workflow instructions (not `~/.claude/CLAUDE.md`)
-- [ ] **INST-02**: `/init-gsd` creates project-local `.claude/rules/` with dual-tool rules (not `~/.claude/rules/`)
-- [ ] **INST-03**: `/init-gsd` configures bin/ script references as absolute paths to the cloned gsd-multi-model repo
-- [ ] **INST-04**: `/init-gsd` detects existing base GSD and skips global modifications
+- [x] **ORCH-01**: `/gsd:drive` auto-chains discuss → plan → execute → verify → advance for a given phase
+- [x] **ORCH-02**: Orchestrator handles context resets between phases internally (no manual `/clear`)
+- [x] **ORCH-03**: Orchestrator pauses only on genuine decision points (ambiguous requirements, verification failures, user input needed)
+- [x] **ORCH-04**: Orchestrator reads STATE.md to resume from any position after interruption
+- [x] **ORCH-05**: Orchestrator supports `--phase N` to target a specific phase and `--to N` to drive through a range
 
-### Coexistence
+### Deterministic Gates
 
-- [ ] **COEX-01**: Addon skills (`init-gsd`, `codex-review`, `gsd-codex-verify`) install globally without colliding with base GSD `/gsd:*` commands
-- [ ] **COEX-02**: Running `/init-gsd` in a project does not modify `~/.claude/CLAUDE.md` or `~/.claude/rules/`
-- [ ] **COEX-03**: Base GSD commands (`/gsd:progress`, `/gsd:plan-phase`, etc.) continue working unchanged after addon skills are installed
+- [ ] **GATE-01**: Execute phase runs project linters before allowing task commit (fail = task blocked)
+- [ ] **GATE-02**: `.architecture.json` format defines allowed dependency directions between modules
+- [ ] **GATE-03**: Structural test scaffolding that agents run against their own output before commit
+- [ ] **GATE-04**: Gate failures produce actionable error messages (what failed, what to fix)
 
-### Validation
+### Entropy Management
 
-- [ ] **VALID-01**: Test suite verifies local-only install leaves global config untouched
-- [ ] **VALID-02**: Test suite verifies base GSD commands still function after addon install
+- [ ] **ENTR-01**: Scheduled doc consistency check (do AGENTS.md conventions match actual code patterns?)
+- [ ] **ENTR-02**: Constraint violation scanning between milestones (architecture rules still hold?)
+- [ ] **ENTR-03**: Stale TODO/FIXME detection with age tracking
+- [ ] **ENTR-04**: Configurable schedule via `.planning/config.json` (daily/weekly/on-push)
+
+### Observability
+
+- [ ] **OBSV-01**: `.planning/config.json` supports observability endpoint config (log sources, error trackers)
+- [ ] **OBSV-02**: `/gsd:debug` can pull real error logs from configured endpoints
+- [ ] **OBSV-03**: Executor agents query telemetry before/after changes when endpoints are configured
+
+### Distribution
+
+- [ ] **DIST-01**: `npx gsd-multi-model` installs skills (default), with `--all` for full setup
+- [ ] **DIST-02**: Package published to npm with correct `bin` entry and `files` manifest
+- [ ] **DIST-03**: Version compatibility check against base GSD on install
+- [ ] **DIST-04**: Clean separation — GSD base is prerequisite, multi-model is add-on only
 
 ## Future Requirements
 
-### Cleanup
+### Progressive Context
 
-- **CLEAN-01**: Uninstall/cleanup command to remove per-project setup
-- **CLEAN-02**: Refactor global installer to support both local and global modes cleanly
+- **PCTX-01**: Executors receive only their task slice + relevant rules, not all planning state
+- **PCTX-02**: Context budget tracking to prevent instruction crowding
+
+### Team Scale
+
+- **TEAM-01**: Harness versioning for tracking config changes over time
+- **TEAM-02**: A/B testing different harness configurations
 
 ## Out of Scope
 
 | Feature | Reason |
 |---------|--------|
-| Renaming addon skills to a different namespace | Skills already have unique names that don't collide with base GSD |
-| Global installer refactor | v1.3 focuses on local install only; global installer works as-is |
-| Uninstall command | Defer to future -- manual cleanup is fine for now |
-| Runtime version checking | Already decided in v1.2 -- install-time only |
+| External daemon for orchestration | Must work within Claude Code's session model |
+| Harness A/B testing | Team-scale concern, not solo developer |
+| Custom model routing beyond profiles | Fixed quality/balanced/budget tiers sufficient |
+| Gemini/OpenCode integration | Claude + Codex only |
+| Runtime version checking | Install-time only, no overhead |
 
 ## Traceability
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| INST-01 | Phase 09 | Pending |
-| INST-02 | Phase 09 | Pending |
-| INST-03 | Phase 09 | Pending |
-| INST-04 | Phase 09 | Pending |
-| COEX-01 | Phase 10 | Pending |
-| COEX-02 | Phase 09 | Pending |
-| COEX-03 | Phase 10 | Pending |
-| VALID-01 | Phase 10 | Pending |
-| VALID-02 | Phase 10 | Pending |
+| ORCH-01 | Phase 01 | Complete |
+| ORCH-02 | Phase 01 | Complete |
+| ORCH-03 | Phase 01 | Complete |
+| ORCH-04 | Phase 01 | Complete |
+| ORCH-05 | Phase 01 | Complete |
+| GATE-01 | Phase 02 | Pending |
+| GATE-02 | Phase 02 | Pending |
+| GATE-03 | Phase 02 | Pending |
+| GATE-04 | Phase 02 | Pending |
+| ENTR-01 | Phase 03 | Pending |
+| ENTR-02 | Phase 03 | Pending |
+| ENTR-03 | Phase 03 | Pending |
+| ENTR-04 | Phase 03 | Pending |
+| OBSV-01 | Phase 04 | Pending |
+| OBSV-02 | Phase 04 | Pending |
+| OBSV-03 | Phase 04 | Pending |
+| DIST-01 | Phase 05 | Pending |
+| DIST-02 | Phase 05 | Pending |
+| DIST-03 | Phase 05 | Pending |
+| DIST-04 | Phase 05 | Pending |
 
 **Coverage:**
-- v1.3 requirements: 9 total
-- Mapped to phases: 9
+- v2.0 requirements: 20 total
+- Mapped to phases: 20
 - Unmapped: 0
 
 ---
-*Requirements defined: 2026-03-08*
-*Last updated: 2026-03-08 after roadmap creation*
+*Requirements defined: 2026-03-11*
+*Last updated: 2026-03-11 after v2.0 milestone creation*
