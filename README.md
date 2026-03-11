@@ -13,11 +13,7 @@ npx github:calenwalshe/gsd-multi-model --all
 
 # Overwrite existing files
 npx github:calenwalshe/gsd-multi-model --force
-```
 
-Requires [GSD](https://github.com/coleam00/get-shit-done-cc) to be installed first:
-```bash
-npx get-shit-done-cc@latest --all --global
 ```
 
 ## What It Installs
