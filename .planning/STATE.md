@@ -3,15 +3,15 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Harness Engineering
 status: executing
-stopped_at: Completed 01-01-PLAN.md
-last_updated: "2026-03-11T07:32:45.149Z"
-last_activity: 2026-03-11 -- Completed 01-01 (gsd-drive SKILL.md + drive-workflow.md)
+stopped_at: Completed 01-02-PLAN.md
+last_updated: "2026-03-11T07:34:05.973Z"
+last_activity: 2026-03-11 -- Completed 01-02 (remove --auto flag from workflow files)
 progress:
   total_phases: 5
   completed_phases: 0
   total_plans: 3
-  completed_plans: 1
-  percent: 33
+  completed_plans: 2
+  percent: 67
 ---
 
 # Project State
@@ -26,11 +26,11 @@ See: .planning/PROJECT.md (updated 2026-03-11)
 ## Current Position
 
 Phase: 01 of 05 (The Orchestrator)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-03-11 -- Completed 01-01 (gsd-drive SKILL.md + drive-workflow.md)
+Last activity: 2026-03-11 -- Completed 01-02 (remove --auto flag from workflow files)
 
-Progress: [███░░░░░░░] 33%
+Progress: [███████░░░] 67%
 
 ## Performance Metrics
 
@@ -55,6 +55,7 @@ Progress: [███░░░░░░░] 33%
 
 *Updated after each plan completion*
 | Phase 01 P01 | 5min | 2 tasks | 2 files |
+| Phase 01 P02 | 4min | 2 tasks | 8 files |
 
 ## Accumulated Context
 
@@ -68,6 +69,7 @@ Recent decisions affecting current work:
 - [v2.0]: Orchestrator must work within Claude Code session model (no external daemon)
 - [Phase 01]: Split gsd-drive into SKILL.md (entry point) + drive-workflow.md (state machine) to keep under 150 lines
 - [Phase 01]: Skill() dispatch only for workflow steps — no Agent() calls to avoid nesting freeze
+- [Phase 01]: Hard cut of --auto flag in v2.0 -- /gsd:drive replaces all auto-chaining
 
 ### Pending Todos
 
@@ -79,6 +81,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-11T07:32:45.144Z
-Stopped at: Completed 01-01-PLAN.md
+Last session: 2026-03-11T07:34:05.968Z
+Stopped at: Completed 01-02-PLAN.md
 Resume file: None
