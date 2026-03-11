@@ -100,7 +100,7 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 01. The Orchestrator | 3/3 | Complete    | 2026-03-11 | - |
-| 02. Deterministic Gates | 3/3 | Complete   | 2026-03-11 | - |
+| 02. Deterministic Gates | 3/3 | Complete    | 2026-03-11 | - |
 | 03. Entropy Management | v2.0 | 0/? | Not started | - |
 | 04. Observability Integration | v2.0 | 0/? | Not started | - |
 | 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |
