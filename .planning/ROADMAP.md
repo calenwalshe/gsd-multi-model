@@ -51,6 +51,13 @@ Plans:
 **Goal**: Bad code is blocked before commit by deterministic checks, not just advisory agent verification
 **Depends on**: Phase 01
 **Requirements**: GATE-01, GATE-02, GATE-03, GATE-04
+**Plans:** 3 plans
+
+Plans:
+- [ ] 02-01-PLAN.md — Core gate scripts (gate-check.sh orchestrator, validate-architecture.sh, .architecture.json)
+- [ ] 02-02-PLAN.md — Test suites for gate infrastructure (test-gate-check.sh, test-validate-architecture.sh)
+- [ ] 02-03-PLAN.md — Integration wiring (gsd-tools-gate.cjs, gate-check skill, test-install.sh updates)
+
 **Success Criteria** (what must be TRUE):
   1. During execute phase, project linters run automatically before each task commit — if linters fail, the task is blocked (not just warned)
   2. `.architecture.json` defines module dependency rules and a validator checks imports against them
@@ -93,7 +100,7 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 01. The Orchestrator | 3/3 | Complete    | 2026-03-11 | - |
-| 02. Deterministic Gates | v2.0 | 0/? | Not started | - |
+| 02. Deterministic Gates | v2.0 | 0/3 | Planning complete | - |
 | 03. Entropy Management | v2.0 | 0/? | Not started | - |
 | 04. Observability Integration | v2.0 | 0/? | Not started | - |
 | 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |
