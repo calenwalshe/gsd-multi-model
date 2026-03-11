@@ -140,6 +140,18 @@ check_bash_syntax "Gate integration tests" "bin/test-gate-check.sh"
 check_file "Architecture unit tests" "bin/test-validate-architecture.sh"
 check_bash_syntax "Architecture unit tests" "bin/test-validate-architecture.sh"
 
+# --- Phase 04: Observability ---
+echo -e "\n${BOLD}Observability:${RESET}"
+check_executable "Telemetry query orchestrator" "bin/query-telemetry.sh"
+check_bash_syntax "Telemetry query orchestrator" "bin/query-telemetry.sh"
+check_file "Telemetry test suite" "bin/test-query-telemetry.sh"
+check_bash_syntax "Telemetry test suite" "bin/test-query-telemetry.sh"
+check_file "Debug skill" "skills/gsd-debug/SKILL.md"
+check_file_contains "Debug skill" "skills/gsd-debug/SKILL.md" "query-telemetry"
+check_file "Observe skill" "skills/observe/SKILL.md"
+check_file_contains "Observe skill" "skills/observe/SKILL.md" "query-telemetry"
+check_file_contains "Config observability key" ".planning/config.json" '"observability"'
+
 # --- Utility scripts ---
 echo -e "\n${BOLD}Utility Scripts:${RESET}"
 for script in bin/worktree-create.sh bin/worktree-cleanup.sh bin/worktree-list.sh bin/codex-task.sh bin/gsd-update.sh; do
