@@ -22,8 +22,8 @@ See `.planning/milestones/` for archived roadmaps.
 **Milestone Goal:** Close the gaps between gsd-multi-model and the harness engineering discipline — transform from a manual-step framework into an autonomous, self-driving system with deterministic quality gates and entropy management.
 
 - [x] **Phase 01: The Orchestrator** - Build `/gsd:drive` that auto-chains discuss → plan → execute → verify → advance with internal context resets (completed 2026-03-11)
-- [ ] **Phase 02: Deterministic Gates** - Add pre-commit lint/test gates to execute phase and architectural constraint enforcement
-- [ ] **Phase 03: Entropy Management** - Wire scheduled maintenance sweeps for doc consistency, constraint violations, and stale TODOs
+- [x] **Phase 02: Deterministic Gates** - Add pre-commit lint/test gates to execute phase and architectural constraint enforcement (completed 2026-03-11)
+- [x] **Phase 03: Entropy Management** - Wire scheduled maintenance sweeps for doc consistency, constraint violations, and stale TODOs (completed 2026-03-11)
 - [ ] **Phase 04: Observability Integration** - Config format for telemetry endpoints, executor agent telemetry queries, debug log pulling
 - [ ] **Phase 05: NPM Publish & Distribution** - Publish `gsd-multi-model` to npm, version compat checks, clean GSD-base separation
 
@@ -51,7 +51,7 @@ Plans:
 **Goal**: Bad code is blocked before commit by deterministic checks, not just advisory agent verification
 **Depends on**: Phase 01
 **Requirements**: GATE-01, GATE-02, GATE-03, GATE-04
-**Plans:** 3 plans
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 02-01-PLAN.md — Core gate scripts (gate-check.sh orchestrator, validate-architecture.sh, .architecture.json)
@@ -68,6 +68,13 @@ Plans:
 **Goal**: Codebase entropy is detected and surfaced automatically between milestones, not discovered ad hoc
 **Depends on**: Phase 02
 **Requirements**: ENTR-01, ENTR-02, ENTR-03, ENTR-04
+**Plans:** 3/3 plans complete
+
+Plans:
+- [x] 03-01-PLAN.md — Sweep orchestrator, doc consistency checker, config schema
+- [x] 03-02-PLAN.md — Stale TODO/FIXME detector with git blame age tracking
+- [ ] 03-03-PLAN.md — Test suites for sweep orchestrator and doc consistency checker
+
 **Success Criteria** (what must be TRUE):
   1. A doc consistency check compares AGENTS.md conventions against actual code patterns and flags drift
   2. Architecture constraint violations are scanned and reported (modules importing across boundaries)
@@ -78,6 +85,12 @@ Plans:
 **Goal**: Executor agents can query real telemetry data instead of relying solely on source code and user-pasted context
 **Depends on**: Phase 02
 **Requirements**: OBSV-01, OBSV-02, OBSV-03
+**Plans:** 2 plans
+
+Plans:
+- [ ] 04-01-PLAN.md — Telemetry query orchestrator script, config schema, test suite
+- [ ] 04-02-PLAN.md — /gsd:debug skill, executor observe skill, test-install updates
+
 **Success Criteria** (what must be TRUE):
   1. `.planning/config.json` supports an `observability` section with endpoint configs (log sources, error trackers)
   2. `/gsd:debug` pulls real error logs from configured endpoints when available
@@ -100,7 +113,7 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 01. The Orchestrator | 3/3 | Complete    | 2026-03-11 | - |
-| 02. Deterministic Gates | v2.0 | 0/3 | Planning complete | - |
-| 03. Entropy Management | v2.0 | 0/? | Not started | - |
-| 04. Observability Integration | v2.0 | 0/? | Not started | - |
+| 02. Deterministic Gates | 3/3 | Complete    | 2026-03-11 | - |
+| 03. Entropy Management | 3/3 | Complete    | 2026-03-11 | - |
+| 04. Observability Integration | v2.0 | 0/2 | Planning complete | - |
 | 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |

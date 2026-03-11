@@ -4,7 +4,8 @@
   "workflow": {
     "research": true,
     "plan_check": true,
-    "verifier": true
+    "verifier": true,
+    "_auto_chain_active": true
   },
   "parallelization": {
     "enabled": true
@@ -16,5 +17,39 @@
       "milestone": "gsd/milestone-{milestone}"
     }
   },
-  "granularity": "standard"
+  "granularity": "standard",
+  "gates": {
+    "enabled": true,
+    "lint": {
+      "enabled": true,
+      "command": "",
+      "auto_detect": true
+    },
+    "architecture": {
+      "enabled": true,
+      "config_path": ".architecture.json"
+    },
+    "structural": {
+      "enabled": true
+    },
+    "timeout_seconds": 10,
+    "on_timeout": "warn"
+  },
+  "entropy": {
+    "enabled": true,
+    "schedule": "weekly",
+    "checks": {
+      "doc_consistency": {
+        "enabled": true
+      },
+      "architecture": {
+        "enabled": true
+      },
+      "stale_todos": {
+        "enabled": true,
+        "warn_after_days": 30,
+        "critical_after_days": 90
+      }
+    }
+  }
 }

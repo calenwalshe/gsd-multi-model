@@ -3,14 +3,14 @@ gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Harness Engineering
 status: completed
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-03-11T07:46:43.842Z"
-last_activity: 2026-03-11 -- Completed 01-03 (installation wiring for gsd-drive)
+stopped_at: Completed 03-03-PLAN.md
+last_updated: "2026-03-11T19:07:43.734Z"
+last_activity: 2026-03-11 -- Completed 03-03 (entropy test suites)
 progress:
   total_phases: 5
-  completed_phases: 1
-  total_plans: 3
-  completed_plans: 3
+  completed_phases: 3
+  total_plans: 9
+  completed_plans: 9
   percent: 100
 ---
 
@@ -21,14 +21,14 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-11)
 
 **Core value:** Structured dual-tool workflow that drives itself through the full loop with deterministic quality gates
-**Current focus:** Phase 01 - The Orchestrator
+**Current focus:** Phase 03 - Entropy Management (Complete)
 
 ## Current Position
 
-Phase: 01 of 05 (The Orchestrator)
-Plan: 3 of 3 in current phase
-Status: Phase 01 complete
-Last activity: 2026-03-11 -- Completed 01-03 (installation wiring for gsd-drive)
+Phase: 03 of 05 (Entropy Management) -- COMPLETE
+Plan: 3 of 3 in current phase (03-01, 03-02, 03-03 complete)
+Status: Phase 03 Complete
+Last activity: 2026-03-11 -- Completed 03-03 (entropy test suites)
 
 Progress: [██████████] 100%
 
@@ -57,6 +57,12 @@ Progress: [██████████] 100%
 | Phase 01 P01 | 5min | 2 tasks | 2 files |
 | Phase 01 P02 | 4min | 2 tasks | 8 files |
 | Phase 01 P03 | 1min | 2 tasks | 2 files |
+| Phase 02 P01 | 4min | 2 tasks | 4 files |
+| Phase 02 P02 | 4min | 2 tasks | 3 files |
+| Phase 02 P03 | 2min | 2 tasks | 3 files |
+| Phase 03 P01 | 5min | 2 tasks | 3 files |
+| Phase 03 P02 | 2min | 1 tasks | 2 files |
+| Phase 03 P03 | 4min | 2 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -72,6 +78,18 @@ Recent decisions affecting current work:
 - [Phase 01]: Skill() dispatch only for workflow steps — no Agent() calls to avoid nesting freeze
 - [Phase 01]: Hard cut of --auto flag in v2.0 -- /gsd:drive replaces all auto-chaining
 - [Phase 01]: cli.sh loop over skills/*/ auto-discovers new skills -- no explicit wiring needed
+- [Phase 02]: Shell-based gate orchestrator (not Node CLI) to match existing bin/ conventions
+- [Phase 02]: Regex-based import detection for architecture validation (not AST parsing)
+- [Phase 02]: Markdown files skipped in architecture validation (documentation refs, not runtime deps)
+- [Phase 02]: Temp git repo fixtures per test for full isolation in gate tests
+- [Phase 02]: Fixed stderr redirect bug in gate-check.sh (2>&1 >&2 -> >&2)
+- [Phase 02]: Standalone gsd-tools-gate.cjs (not modifying GSD base) to survive base updates
+- [Phase 02]: Skill-based protocol injection for gate-augmented task_commit
+- [Phase 03]: git blame -p (porcelain) for reliable TODO age extraction
+- [Phase 03]: Untracked files default to age_days=0 for graceful handling
+- [Phase 03]: Warning-severity findings fail checks; info-severity findings do not
+- [Phase 03]: Architecture entropy check reuses validate-architecture.sh with full project file list
+- [Phase 03]: Test fixtures run checker from original path with --project-root to avoid self-detection
 
 ### Pending Todos
 
@@ -83,6 +101,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-11T07:36:23Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-03-11T19:03:50.333Z
+Stopped at: Completed 03-03-PLAN.md
 Resume file: None

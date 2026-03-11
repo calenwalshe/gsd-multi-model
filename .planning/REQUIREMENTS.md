@@ -17,17 +17,17 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 
 ### Deterministic Gates
 
-- [ ] **GATE-01**: Execute phase runs project linters before allowing task commit (fail = task blocked)
-- [ ] **GATE-02**: `.architecture.json` format defines allowed dependency directions between modules
-- [ ] **GATE-03**: Structural test scaffolding that agents run against their own output before commit
-- [ ] **GATE-04**: Gate failures produce actionable error messages (what failed, what to fix)
+- [x] **GATE-01**: Execute phase runs project linters before allowing task commit (fail = task blocked)
+- [x] **GATE-02**: `.architecture.json` format defines allowed dependency directions between modules
+- [x] **GATE-03**: Structural test scaffolding that agents run against their own output before commit
+- [x] **GATE-04**: Gate failures produce actionable error messages (what failed, what to fix)
 
 ### Entropy Management
 
-- [ ] **ENTR-01**: Scheduled doc consistency check (do AGENTS.md conventions match actual code patterns?)
-- [ ] **ENTR-02**: Constraint violation scanning between milestones (architecture rules still hold?)
-- [ ] **ENTR-03**: Stale TODO/FIXME detection with age tracking
-- [ ] **ENTR-04**: Configurable schedule via `.planning/config.json` (daily/weekly/on-push)
+- [x] **ENTR-01**: Scheduled doc consistency check (do AGENTS.md conventions match actual code patterns?)
+- [x] **ENTR-02**: Constraint violation scanning between milestones (architecture rules still hold?)
+- [x] **ENTR-03**: Stale TODO/FIXME detection with age tracking
+- [x] **ENTR-04**: Configurable schedule via `.planning/config.json` (daily/weekly/on-push)
 
 ### Observability
 
@@ -73,14 +73,14 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 | ORCH-03 | Phase 01 | Complete |
 | ORCH-04 | Phase 01 | Complete |
 | ORCH-05 | Phase 01 | Complete |
-| GATE-01 | Phase 02 | Pending |
-| GATE-02 | Phase 02 | Pending |
-| GATE-03 | Phase 02 | Pending |
-| GATE-04 | Phase 02 | Pending |
-| ENTR-01 | Phase 03 | Pending |
-| ENTR-02 | Phase 03 | Pending |
-| ENTR-03 | Phase 03 | Pending |
-| ENTR-04 | Phase 03 | Pending |
+| GATE-01 | Phase 02 | Complete |
+| GATE-02 | Phase 02 | Complete |
+| GATE-03 | Phase 02 | Complete |
+| GATE-04 | Phase 02 | Complete |
+| ENTR-01 | Phase 03 | Complete |
+| ENTR-02 | Phase 03 | Complete |
+| ENTR-03 | Phase 03 | Complete |
+| ENTR-04 | Phase 03 | Complete |
 | OBSV-01 | Phase 04 | Pending |
 | OBSV-02 | Phase 04 | Pending |
 | OBSV-03 | Phase 04 | Pending |

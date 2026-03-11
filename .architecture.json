@@ -1,0 +1,28 @@
+{
+  "version": "1.0",
+  "modules": {
+    "skills/*": {
+      "description": "Claude Code skills (Markdown instructions)",
+      "can_import": ["bin/*"],
+      "cannot_import": ["global/*", ".planning/*"]
+    },
+    "bin/*": {
+      "description": "CLI scripts and tools",
+      "can_import": ["bin/*"],
+      "cannot_import": ["skills/*"]
+    },
+    "global/*": {
+      "description": "Global config templates",
+      "can_import": [],
+      "cannot_import": ["skills/*", "bin/*"]
+    }
+  },
+  "rules": [
+    {
+      "name": "no-circular-skill-deps",
+      "description": "Skills must not reference other skills as dependencies",
+      "from": "skills/*/",
+      "cannot_reach": "skills/*/"
+    }
+  ]
+}
