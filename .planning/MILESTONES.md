@@ -1,9 +1,21 @@
 # Milestones
 
-## v1.1 Execution-Side Integration (Shipped: 2026-03-03)
+## v1.2 Upstream Sync (Shipped: 2026-03-06)
+
+**Phases completed:** 2 phases, 2 plans
+**Timeline:** 2026-03-06 (single day)
+
+**Key accomplishments:**
+1. Version pinning with `gsd-compat.json` tested range manifest
+2. Install-time compatibility check with warn-only behavior
+3. Update wrapper (`gsd-update.sh`) with three-stage pipeline and structured exit codes
+
+---
+
+## v1.1 Execution-Side Integration (Shipped: 2026-03-05)
 
 **Phases completed:** 4 phases, 9 plans, 18 tasks
-**Timeline:** 2026-03-02 to 2026-03-03 (2 days)
+**Timeline:** 2026-03-02 to 2026-03-05 (2 days)
 **Files changed:** 77 files, 14,484 lines added
 **Production code:** 4,504 LOC (bash)
 
@@ -30,12 +42,11 @@
 5. PLAN.md XML schema extended with `executor` and `confidence` attributes for Claude/Codex routing
 6. Plan checker Dimension 9 added for routing validation with Phase 1 backward compatibility
 
-**Known Gaps (deferred to v1.1):**
-- R5: Worktree Automation (Phase 3)
-- R6: Codex Execution Wrapper (Phase 3)
-- R7: End-to-End Demo (Phase 5)
-- R8: Installer Hardening (Phase 5)
-- R9: Global Config Templates (Phase 5)
-
 ---
 
+## v1.3 Safe Local-First Install (Superseded: 2026-03-11)
+
+**Status:** Superseded by v2.0
+**Reason:** The npx-based `bin/cli.sh` approach (built during v2.0 planning) achieves zero-risk install without project-scoped config complexity. Local-first goals are fully covered by the skills-only default install mode.
+
+---

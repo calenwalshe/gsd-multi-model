@@ -5,7 +5,8 @@
 - v1.0 Core Skills (Phases 01-02) -- shipped 2026-03-03
 - v1.1 Execution Pipeline (Phases 03-06) -- shipped 2026-03-05
 - v1.2 Upstream Sync (Phases 07-08) -- shipped 2026-03-06
-- v1.3 Safe Local-First Install (Phases 09-10) -- in progress
+- v1.3 Safe Local-First Install -- superseded by v2.0
+- v2.0 Harness Engineering (Phases 01-05) -- in progress
 
 ## Phases
 
@@ -16,50 +17,76 @@ See `.planning/milestones/` for archived roadmaps.
 
 </details>
 
-### v1.3 Safe Local-First Install (In Progress)
+### v2.0 Harness Engineering (In Progress)
 
-**Milestone Goal:** Make the dual-tool workflow testable in a single project without modifying the global GSD setup -- zero risk to existing workflow.
+**Milestone Goal:** Close the gaps between gsd-multi-model and the harness engineering discipline — transform from a manual-step framework into an autonomous, self-driving system with deterministic quality gates and entropy management.
 
-- [ ] **Phase 09: Local-First Install** - Modify /init-gsd to scaffold project-local config files with absolute repo paths, skipping global modifications when base GSD is detected
-- [ ] **Phase 10: Coexistence Validation** - Verify addon skills coexist with base GSD without collisions and build test suites that prove local-only install and base GSD integrity
+- [ ] **Phase 01: The Orchestrator** - Build `/gsd:drive` that auto-chains discuss → plan → execute → verify → advance with internal context resets
+- [ ] **Phase 02: Deterministic Gates** - Add pre-commit lint/test gates to execute phase and architectural constraint enforcement
+- [ ] **Phase 03: Entropy Management** - Wire scheduled maintenance sweeps for doc consistency, constraint violations, and stale TODOs
+- [ ] **Phase 04: Observability Integration** - Config format for telemetry endpoints, executor agent telemetry queries, debug log pulling
+- [ ] **Phase 05: NPM Publish & Distribution** - Publish `gsd-multi-model` to npm, version compat checks, clean GSD-base separation
 
 ## Phase Details
 
-### Phase 09: Local-First Install
-**Goal**: Users can run /init-gsd in any project and get a working dual-tool setup without any global side effects
-**Depends on**: Phase 08 (v1.2 complete)
-**Requirements**: INST-01, INST-02, INST-03, INST-04, COEX-02
+### Phase 01: The Orchestrator
+**Goal**: Users run `/gsd:drive` and the system chains through discuss → plan → execute → verify → advance without manual `/clear` + next-command sequences
+**Depends on**: v1.2 complete
+**Requirements**: ORCH-01, ORCH-02, ORCH-03, ORCH-04, ORCH-05
 **Success Criteria** (what must be TRUE):
-  1. Running /init-gsd in a project creates a CLAUDE.md in the project root (not ~/.claude/CLAUDE.md) containing dual-tool workflow instructions
-  2. Running /init-gsd in a project creates .claude/rules/ in the project directory (not ~/.claude/rules/) with dual-tool rules
-  3. All bin/ script references in the generated config use absolute paths to the cloned gsd-multi-model repo (not relative paths or symlinks to global install)
-  4. When base GSD is already installed globally, /init-gsd detects it and skips all global modifications (no writes to ~/.claude/ directory tree)
-**Plans**: TBD
+  1. `/gsd:drive` reads STATE.md and automatically invokes the next workflow step for the current phase
+  2. Context resets happen internally between phases — user never needs to manually `/clear`
+  3. The orchestrator pauses and asks the user only when there is genuine ambiguity, a verification failure, or user input is required
+  4. After interruption (crash, timeout, user abort), `/gsd:drive` resumes from the correct position by reading STATE.md
+  5. `/gsd:drive --phase 3` targets phase 3 specifically; `/gsd:drive --to 5` drives phases sequentially through phase 5
 
-Plans:
-- [ ] 09-01: TBD
-- [ ] 09-02: TBD
-
-### Phase 10: Coexistence Validation
-**Goal**: Addon skills and base GSD operate side-by-side without interference, proven by automated tests
-**Depends on**: Phase 09
-**Requirements**: COEX-01, COEX-03, VALID-01, VALID-02
+### Phase 02: Deterministic Gates
+**Goal**: Bad code is blocked before commit by deterministic checks, not just advisory agent verification
+**Depends on**: Phase 01
+**Requirements**: GATE-01, GATE-02, GATE-03, GATE-04
 **Success Criteria** (what must be TRUE):
-  1. Addon skills (init-gsd, codex-review, gsd-codex-verify) are installed in the global skills directory without overwriting or shadowing any base GSD /gsd:* commands
-  2. Base GSD commands (/gsd:progress, /gsd:plan-phase, etc.) produce identical behavior after addon install as before
-  3. A test suite runs and passes that verifies /init-gsd leaves ~/.claude/CLAUDE.md and ~/.claude/rules/ completely untouched
-  4. A test suite runs and passes that verifies base GSD commands still function correctly after addon skills are installed
-**Plans**: TBD
+  1. During execute phase, project linters run automatically before each task commit — if linters fail, the task is blocked (not just warned)
+  2. `.architecture.json` defines module dependency rules and a validator checks imports against them
+  3. Agents can run structural tests against their own output before committing
+  4. Gate failures produce clear, actionable messages: what rule was violated, which file, how to fix
 
-Plans:
-- [ ] 10-01: TBD
-- [ ] 10-02: TBD
+### Phase 03: Entropy Management
+**Goal**: Codebase entropy is detected and surfaced automatically between milestones, not discovered ad hoc
+**Depends on**: Phase 02
+**Requirements**: ENTR-01, ENTR-02, ENTR-03, ENTR-04
+**Success Criteria** (what must be TRUE):
+  1. A doc consistency check compares AGENTS.md conventions against actual code patterns and flags drift
+  2. Architecture constraint violations are scanned and reported (modules importing across boundaries)
+  3. Stale TODO/FIXME comments are detected with age tracking (days since introduced)
+  4. Sweep schedule is configurable in `.planning/config.json` with daily/weekly/on-push options
+
+### Phase 04: Observability Integration
+**Goal**: Executor agents can query real telemetry data instead of relying solely on source code and user-pasted context
+**Depends on**: Phase 02
+**Requirements**: OBSV-01, OBSV-02, OBSV-03
+**Success Criteria** (what must be TRUE):
+  1. `.planning/config.json` supports an `observability` section with endpoint configs (log sources, error trackers)
+  2. `/gsd:debug` pulls real error logs from configured endpoints when available
+  3. Executor agents query telemetry before/after changes when endpoints are configured (opt-in, no-op if unconfigured)
+
+### Phase 05: NPM Publish & Distribution
+**Goal**: `npx gsd-multi-model` installs the add-on layer cleanly on top of existing GSD
+**Depends on**: Phase 01 (can run in parallel with 03/04)
+**Requirements**: DIST-01, DIST-02, DIST-03, DIST-04
+**Success Criteria** (what must be TRUE):
+  1. `npx gsd-multi-model` installs skills only (safe default); `--all` adds codex config, rules, globals
+  2. Package is published to npm with correct `bin`, `files`, and metadata
+  3. Install checks GSD base version against `gsd-compat.json` and warns on mismatch
+  4. Installing gsd-multi-model never duplicates or overwrites base GSD files
 
 ## Progress
 
-**Execution Order:** 09 -> 10
+**Execution Order:** 01 -> 02 -> 03 (parallel with 04) -> 05
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 09. Local-First Install | v1.3 | 0/? | Not started | - |
-| 10. Coexistence Validation | v1.3 | 0/? | Not started | - |
+| 01. The Orchestrator | v2.0 | 0/? | Not started | - |
+| 02. Deterministic Gates | v2.0 | 0/? | Not started | - |
+| 03. Entropy Management | v2.0 | 0/? | Not started | - |
+| 04. Observability Integration | v2.0 | 0/? | Not started | - |
+| 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |

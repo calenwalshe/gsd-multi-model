@@ -2,11 +2,11 @@
 
 ## What This Is
 
-A multi-model development framework that combines Claude Code and Codex CLI into a unified, spec-driven workflow. Skills, task-splitting heuristics, worktree automation, Codex execution wrapper, orchestration logic, and upstream sync tooling — installed via a single `bash install.sh` command and bootstrapped per-project with `/init-gsd`.
+A multi-model development framework that combines Claude Code and Codex CLI into a unified, spec-driven workflow. Skills, task-splitting heuristics, worktree automation, Codex execution wrapper, orchestration logic, and upstream sync tooling — installed via `npx gsd-multi-model` (or locally via `./bin/cli.sh`) and bootstrapped per-project with `/init-gsd`.
 
 ## Core Value
 
-Structured dual-tool workflow that eliminates per-session re-explanation and splits work by tool strengths automatically.
+Structured dual-tool workflow that eliminates per-session re-explanation, splits work by tool strengths automatically, and drives itself through the full planning-to-verification loop without manual step-by-step invocation.
 
 ## Current State
 
@@ -15,6 +15,8 @@ Structured dual-tool workflow that eliminates per-session re-explanation and spl
 **Production code:** ~5,000 LOC across bin/, skills/, global/, rules/, install scripts
 
 The full dual-tool loop is proven end-to-end: bootstrap → plan → split → parallel Codex execution in worktree → merge → cross-review. All scripts have integration test suites. Addon stays in sync with base GSD via version pinning and single-command update wrapper.
+
+**v1.3 (superseded):** Local-first install goals were replaced by the npx-based `bin/cli.sh` approach, which achieves zero-risk install without modifying global GSD setup. Rolled into v2.0.
 
 ## Requirements
 
@@ -35,31 +37,36 @@ The full dual-tool loop is proven end-to-end: bootstrap → plan → split → p
 
 ### Active
 
-## Current Milestone: v1.3 Safe Local-First Install
+## Current Milestone: v2.0 Harness Engineering
 
-**Goal:** Make the dual-tool workflow testable in a single project without modifying the global GSD setup — zero risk to existing workflow.
+**Goal:** Close the gaps between gsd-multi-model and the harness engineering discipline — transform from a manual-step framework into an autonomous, self-driving system with deterministic quality gates and entropy management.
+
+**Gap analysis source:** OpenAI "Harness Engineering" (2026), Martin Fowler analysis, InfoQ coverage.
 
 **Target features:**
-- Project-scoped install mode that doesn't touch ~/.claude/
-- Local CLAUDE.md and .claude/rules/ for per-project opt-in
-- Skill coexistence with base GSD (no name collisions, no global side effects)
-- Clear opt-in/opt-out mechanism per project
+- Autonomous orchestrator that chains discuss → plan → execute → verify → advance
+- Deterministic lint/test gates that block bad code before commit
+- Architectural constraint enforcement via machine-readable rules
+- Scheduled entropy management (doc consistency, constraint scanning)
+- Observability integration for executor agents
+- NPM-publishable package for `npx gsd-multi-model` distribution
 
 ### Out of Scope
 
 - Gemini, OpenCode, or other AI tool integration — Claude + Codex only
 - Mobile/web UI — CLI-first approach
 - Cloud hosting — local development tool
+- Harness A/B testing framework — matters at team scale, not solo
 - Real-time streaming from Codex — Codex CLI handles its own output
-- Custom model routing — fixed Claude/Codex split is sufficient
-- Runtime version checking — install-time only, no overhead during normal use
-- Auto-repair on version mismatch — warn only, user stays in control
+- Custom model routing beyond profiles — fixed quality/balanced/budget tiers sufficient
 
 ## Context
 
-Three milestones shipped in 5 days. v1.0 delivered planning-side integration (3 skills + task routing). v1.1 delivered execution-side integration (installer hardening, worktree lifecycle, Codex runner, end-to-end demo). v1.2 delivered upstream sync tooling (version pinning, compat check, update wrapper).
+Three milestones shipped in 5 days. v1.0 delivered planning-side integration (3 skills + task routing). v1.1 delivered execution-side integration (installer hardening, worktree lifecycle, Codex runner, end-to-end demo). v1.2 delivered upstream sync tooling (version pinning, compat check, update wrapper). v1.3 was superseded by v2.0 — its local-first install goals were solved by the npx CLI approach.
 
-Tech stack: Claude Code skills (markdown), GSD agents (prompt engineering), Bash (bin/ scripts, install, tests).
+Gap analysis against OpenAI's harness engineering framework identified 7 gaps: orchestration (major), deterministic gates (major), entropy management (moderate), observability (moderate), progressive context disclosure (minor), harness versioning (minor), and NPM distribution (minor).
+
+Tech stack: Claude Code skills (markdown), GSD agents (prompt engineering), Bash (bin/ scripts, install, tests), Node.js (npx CLI entry point).
 
 ## Key Decisions
 
@@ -72,19 +79,18 @@ Tech stack: Claude Code skills (markdown), GSD agents (prompt engineering), Bash
 | Human-readable to stderr, JSON to stdout | ✓ Good — clean piping for all bin/ scripts |
 | Shell-only XML parsing with awk/grep/sed | ✓ Good — zero external dependencies |
 | Confidence routing: high=full-auto, medium=default, low=skip | ✓ Good — safe Codex invocation |
-| Temp file state sharing in demo (avoid subshell var loss) | ✓ Good — reliable inter-stage communication |
-| Simulated init-gsd in demo (skill not standalone script) | ✓ Good — pragmatic workaround |
 | Addon overlay pattern (not fork) | ✓ Good — GSD updates don't destroy customizations |
 | Version range pinning (not exact version) | ✓ Good — flexibility without breaking |
 | Install-time checks only (not runtime) | ✓ Good — lean, no overhead during normal use |
-| Wide upper bound on compat range (1.99.99) | ✓ Good — avoids false alarms from GSD patches |
-| Inline semver_compare in tests and update script | ✓ Good — avoids set -euo pipefail side effects |
+| npx CLI replaces monolithic install.sh | ✓ Good — skills-only default, opt-in layers |
+| v1.3 superseded by v2.0 | ✓ Good — npx approach solves local-first better |
 
 ## Constraints
 
 - Skills must work across Claude Code sessions without re-explaining
 - All instruction files must stay under 200 lines for >92% rule adherence
 - No external dependencies beyond Claude Code and Codex CLI
+- Orchestrator must work within Claude Code's context/session model (no external daemon required)
 
 ## Target Users
 
@@ -92,9 +98,13 @@ Developers who use both Claude Code and Codex CLI and want a repeatable harness 
 
 ## Success Criteria
 
-✓ Achieved: End-to-end demo runs full loop without manual intervention — `/init-gsd` → plan → auto-split → Codex builds in worktree → cross-review. `bash bin/demo.sh` proves it in 7 stages.
+✓ Achieved: End-to-end demo runs full loop without manual intervention — `/init-gsd` → plan → auto-split → Codex builds in worktree → cross-review.
 
-✓ Achieved: Upstream sync with single-command update — `bin/gsd-update.sh` chains GSD update → addon reinstall → compat verification with structured exit codes.
+✓ Achieved: Upstream sync with single-command update.
+
+Pending: Autonomous orchestrator drives full phase lifecycle without manual `/clear` + next-command sequences.
+
+Pending: Deterministic gates block bad code before commit (not just advisory verification).
 
 ---
-*Last updated: 2026-03-08 after v1.3 milestone started*
+*Last updated: 2026-03-11 after v2.0 milestone started*
