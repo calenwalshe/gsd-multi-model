@@ -1,0 +1,15 @@
+model = "gpt-5-codex"
+approval_policy = "untrusted"
+sandbox_mode = "workspace-write"
+
+# Read Claude/GSD instruction files as fallback
+project_doc_fallback_filenames = ["CLAUDE.md", "COPILOT.md"]
+
+[profiles.review]
+model = "gpt-5-codex"
+approval_policy = "untrusted"
+sandbox_mode = "read-only"
+
+[profiles.fast]
+model = "gpt-5-codex"
+approval_policy = "on-request"
