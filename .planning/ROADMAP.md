@@ -22,7 +22,7 @@ See `.planning/milestones/` for archived roadmaps.
 **Milestone Goal:** Close the gaps between gsd-multi-model and the harness engineering discipline — transform from a manual-step framework into an autonomous, self-driving system with deterministic quality gates and entropy management.
 
 - [x] **Phase 01: The Orchestrator** - Build `/gsd:drive` that auto-chains discuss → plan → execute → verify → advance with internal context resets (completed 2026-03-11)
-- [ ] **Phase 02: Deterministic Gates** - Add pre-commit lint/test gates to execute phase and architectural constraint enforcement
+- [x] **Phase 02: Deterministic Gates** - Add pre-commit lint/test gates to execute phase and architectural constraint enforcement (completed 2026-03-11)
 - [ ] **Phase 03: Entropy Management** - Wire scheduled maintenance sweeps for doc consistency, constraint violations, and stale TODOs
 - [ ] **Phase 04: Observability Integration** - Config format for telemetry endpoints, executor agent telemetry queries, debug log pulling
 - [ ] **Phase 05: NPM Publish & Distribution** - Publish `gsd-multi-model` to npm, version compat checks, clean GSD-base separation
@@ -51,7 +51,7 @@ Plans:
 **Goal**: Bad code is blocked before commit by deterministic checks, not just advisory agent verification
 **Depends on**: Phase 01
 **Requirements**: GATE-01, GATE-02, GATE-03, GATE-04
-**Plans:** 2/3 plans executed
+**Plans:** 3/3 plans complete
 
 Plans:
 - [ ] 02-01-PLAN.md — Core gate scripts (gate-check.sh orchestrator, validate-architecture.sh, .architecture.json)
@@ -100,7 +100,7 @@ Plans:
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
 | 01. The Orchestrator | 3/3 | Complete    | 2026-03-11 | - |
-| 02. Deterministic Gates | 2/3 | In Progress|  | - |
+| 02. Deterministic Gates | 3/3 | Complete   | 2026-03-11 | - |
 | 03. Entropy Management | v2.0 | 0/? | Not started | - |
 | 04. Observability Integration | v2.0 | 0/? | Not started | - |
 | 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |
