@@ -33,6 +33,13 @@ See `.planning/milestones/` for archived roadmaps.
 **Goal**: Users run `/gsd:drive` and the system chains through discuss → plan → execute → verify → advance without manual `/clear` + next-command sequences
 **Depends on**: v1.2 complete
 **Requirements**: ORCH-01, ORCH-02, ORCH-03, ORCH-04, ORCH-05
+**Plans:** 3 plans
+
+Plans:
+- [ ] 01-01-PLAN.md — Build SKILL.md entry point and drive-workflow.md state machine
+- [ ] 01-02-PLAN.md — Remove --auto flag from all existing workflow files
+- [ ] 01-03-PLAN.md — Wire installation pipeline and human verification
+
 **Success Criteria** (what must be TRUE):
   1. `/gsd:drive` reads STATE.md and automatically invokes the next workflow step for the current phase
   2. Context resets happen internally between phases — user never needs to manually `/clear`
@@ -85,7 +92,7 @@ See `.planning/milestones/` for archived roadmaps.
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 01. The Orchestrator | v2.0 | 0/? | Not started | - |
+| 01. The Orchestrator | v2.0 | 0/3 | Planning complete | - |
 | 02. Deterministic Gates | v2.0 | 0/? | Not started | - |
 | 03. Entropy Management | v2.0 | 0/? | Not started | - |
 | 04. Observability Integration | v2.0 | 0/? | Not started | - |
