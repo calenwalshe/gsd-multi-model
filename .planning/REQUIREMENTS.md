@@ -17,10 +17,10 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 
 ### Deterministic Gates
 
-- [ ] **GATE-01**: Execute phase runs project linters before allowing task commit (fail = task blocked)
-- [ ] **GATE-02**: `.architecture.json` format defines allowed dependency directions between modules
-- [ ] **GATE-03**: Structural test scaffolding that agents run against their own output before commit
-- [ ] **GATE-04**: Gate failures produce actionable error messages (what failed, what to fix)
+- [x] **GATE-01**: Execute phase runs project linters before allowing task commit (fail = task blocked)
+- [x] **GATE-02**: `.architecture.json` format defines allowed dependency directions between modules
+- [x] **GATE-03**: Structural test scaffolding that agents run against their own output before commit
+- [x] **GATE-04**: Gate failures produce actionable error messages (what failed, what to fix)
 
 ### Entropy Management
 
@@ -73,10 +73,10 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 | ORCH-03 | Phase 01 | Complete |
 | ORCH-04 | Phase 01 | Complete |
 | ORCH-05 | Phase 01 | Complete |
-| GATE-01 | Phase 02 | Pending |
-| GATE-02 | Phase 02 | Pending |
-| GATE-03 | Phase 02 | Pending |
-| GATE-04 | Phase 02 | Pending |
+| GATE-01 | Phase 02 | Complete |
+| GATE-02 | Phase 02 | Complete |
+| GATE-03 | Phase 02 | Complete |
+| GATE-04 | Phase 02 | Complete |
 | ENTR-01 | Phase 03 | Pending |
 | ENTR-02 | Phase 03 | Pending |
 | ENTR-03 | Phase 03 | Pending |

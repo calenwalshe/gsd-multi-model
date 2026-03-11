@@ -2,16 +2,16 @@
 gsd_state_version: 1.0
 milestone: v2.0
 milestone_name: Harness Engineering
-status: completed
-stopped_at: Completed 01-03-PLAN.md
-last_updated: "2026-03-11T07:46:43.842Z"
-last_activity: 2026-03-11 -- Completed 01-03 (installation wiring for gsd-drive)
+status: executing
+stopped_at: Completed 02-01-PLAN.md
+last_updated: "2026-03-11T18:27:40Z"
+last_activity: 2026-03-11 -- Completed 02-01 (gate scripts and architecture validator)
 progress:
   total_phases: 5
   completed_phases: 1
   total_plans: 3
-  completed_plans: 3
-  percent: 100
+  completed_plans: 1
+  percent: 33
 ---
 
 # Project State
@@ -21,16 +21,16 @@ progress:
 See: .planning/PROJECT.md (updated 2026-03-11)
 
 **Core value:** Structured dual-tool workflow that drives itself through the full loop with deterministic quality gates
-**Current focus:** Phase 01 - The Orchestrator
+**Current focus:** Phase 02 - Deterministic Gates
 
 ## Current Position
 
-Phase: 01 of 05 (The Orchestrator)
-Plan: 3 of 3 in current phase
-Status: Phase 01 complete
-Last activity: 2026-03-11 -- Completed 01-03 (installation wiring for gsd-drive)
+Phase: 02 of 05 (Deterministic Gates)
+Plan: 1 of 3 in current phase
+Status: Executing phase 02
+Last activity: 2026-03-11 -- Completed 02-01 (gate scripts and architecture validator)
 
-Progress: [██████████] 100%
+Progress: [███-------] 33%
 
 ## Performance Metrics
 
@@ -57,6 +57,7 @@ Progress: [██████████] 100%
 | Phase 01 P01 | 5min | 2 tasks | 2 files |
 | Phase 01 P02 | 4min | 2 tasks | 8 files |
 | Phase 01 P03 | 1min | 2 tasks | 2 files |
+| Phase 02 P01 | 4min | 2 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Skill() dispatch only for workflow steps — no Agent() calls to avoid nesting freeze
 - [Phase 01]: Hard cut of --auto flag in v2.0 -- /gsd:drive replaces all auto-chaining
 - [Phase 01]: cli.sh loop over skills/*/ auto-discovers new skills -- no explicit wiring needed
+- [Phase 02]: Shell-based gate orchestrator (not Node CLI) to match existing bin/ conventions
+- [Phase 02]: Regex-based import detection for architecture validation (not AST parsing)
+- [Phase 02]: Markdown files skipped in architecture validation (documentation refs, not runtime deps)
 
 ### Pending Todos
 
@@ -83,6 +87,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-03-11T07:36:23Z
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-03-11T18:27:40Z
+Stopped at: Completed 02-01-PLAN.md
 Resume file: None
