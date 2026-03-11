@@ -270,7 +270,7 @@ run_architecture_gate() {
         console.error('  Issue: ' + item.message);
         console.error('  Fix: ' + item.fix);
       });
-    " 2>&1 >&2
+    " >&2
     append_gate "architecture" "false" "$arch_files_checked" "Architecture violations found" "$arch_violations"
     OVERALL_PASSED="false"
   else
@@ -400,7 +400,7 @@ run_structural_gate() {
         console.error('  Rule: ' + item.rule);
         console.error('  Issue: ' + item.message);
       });
-    " 2>&1 >&2
+    " >&2
     append_gate "structural" "false" "$check_count" "$fail_count structural checks failed" "$violations"
     OVERALL_PASSED="false"
   else
