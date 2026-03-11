@@ -51,5 +51,9 @@
         "critical_after_days": 90
       }
     }
+  },
+  "observability": {
+    "enabled": false,
+    "endpoints": {}
   }
 }
