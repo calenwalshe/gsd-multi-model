@@ -1,2 +1,9 @@
 node_modules
 .claude/internet-mode-used_DO_NOT_REMOVE_MANUALLY_SECURITY_RISK
+.env
+
+# Google Drive sync artifacts
+.git (1)/
+.planning (1)/
+test/fixtures (1)/
+asdf
