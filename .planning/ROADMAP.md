@@ -100,6 +100,12 @@ Plans:
 **Goal**: `npx gsd-multi-model` installs the add-on layer cleanly on top of existing GSD
 **Depends on**: Phase 01 (can run in parallel with 03/04)
 **Requirements**: DIST-01, DIST-02, DIST-03, DIST-04
+**Plans:** 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Version compat check, anti-duplication guards, package metadata fixes
+- [ ] 05-02-PLAN.md — Verify npx execution path and publish readiness checkpoint
+
 **Success Criteria** (what must be TRUE):
   1. `npx gsd-multi-model` installs skills only (safe default); `--all` adds codex config, rules, globals
   2. Package is published to npm with correct `bin`, `files`, and metadata
@@ -116,4 +122,4 @@ Plans:
 | 02. Deterministic Gates | 3/3 | Complete    | 2026-03-11 | - |
 | 03. Entropy Management | 3/3 | Complete    | 2026-03-11 | - |
 | 04. Observability Integration | 2/2 | Complete    | 2026-03-11 | - |
-| 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |
+| 05. NPM Publish & Distribution | v2.0 | 0/2 | Not started | - |
