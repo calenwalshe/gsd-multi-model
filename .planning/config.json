@@ -34,5 +34,22 @@
     },
     "timeout_seconds": 10,
     "on_timeout": "warn"
+  },
+  "entropy": {
+    "enabled": true,
+    "schedule": "weekly",
+    "checks": {
+      "doc_consistency": {
+        "enabled": true
+      },
+      "architecture": {
+        "enabled": true
+      },
+      "stale_todos": {
+        "enabled": true,
+        "warn_after_days": 30,
+        "critical_after_days": 90
+      }
+    }
   }
 }
