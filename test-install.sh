@@ -46,6 +46,8 @@ echo "=== Checking Claude Code skills ==="
 check "$HOME/.claude/skills/init-gsd/SKILL.md"
 check "$HOME/.claude/skills/codex-review/SKILL.md"
 check "$HOME/.claude/skills/gsd-codex-verify/SKILL.md"
+check "$HOME/.claude/skills/gsd-drive/SKILL.md"
+check "$HOME/.claude/skills/gsd-drive/drive-workflow.md"
 
 echo ""
 echo "=== Checking GSD installation ==="

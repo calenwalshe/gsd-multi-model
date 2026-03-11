@@ -525,6 +525,7 @@ Global config:
 Next steps:
   /gsd:new-project         -- Initialize GSD planning for this project
   /gsd:discuss-phase       -- Start your first phase
+  /gsd:drive               -- Auto-drive the full GSD workflow (discuss -> plan -> execute -> verify -> advance)
 
 After each phase:
   /codex-review            -- Cross-model validation with Codex
