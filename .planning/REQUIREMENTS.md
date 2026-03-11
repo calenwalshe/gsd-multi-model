@@ -31,14 +31,14 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 
 ### Observability
 
-- [ ] **OBSV-01**: `.planning/config.json` supports observability endpoint config (log sources, error trackers)
-- [ ] **OBSV-02**: `/gsd:debug` can pull real error logs from configured endpoints
-- [ ] **OBSV-03**: Executor agents query telemetry before/after changes when endpoints are configured
+- [x] **OBSV-01**: `.planning/config.json` supports observability endpoint config (log sources, error trackers)
+- [x] **OBSV-02**: `/gsd:debug` can pull real error logs from configured endpoints
+- [x] **OBSV-03**: Executor agents query telemetry before/after changes when endpoints are configured
 
 ### Distribution
 
-- [ ] **DIST-01**: `npx gsd-multi-model` installs skills (default), with `--all` for full setup
-- [ ] **DIST-02**: Package published to npm with correct `bin` entry and `files` manifest
+- [x] **DIST-01**: `npx gsd-multi-model` installs skills (default), with `--all` for full setup
+- [x] **DIST-02**: Package published to npm with correct `bin` entry and `files` manifest
 - [ ] **DIST-03**: Version compatibility check against base GSD on install
 - [ ] **DIST-04**: Clean separation — GSD base is prerequisite, multi-model is add-on only
 
@@ -81,11 +81,11 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 | ENTR-02 | Phase 03 | Complete |
 | ENTR-03 | Phase 03 | Complete |
 | ENTR-04 | Phase 03 | Complete |
-| OBSV-01 | Phase 04 | Pending |
-| OBSV-02 | Phase 04 | Pending |
-| OBSV-03 | Phase 04 | Pending |
-| DIST-01 | Phase 05 | Pending |
-| DIST-02 | Phase 05 | Pending |
+| OBSV-01 | Phase 04 | Complete |
+| OBSV-02 | Phase 04 | Complete |
+| OBSV-03 | Phase 04 | Complete |
+| DIST-01 | Phase 05 | Complete |
+| DIST-02 | Phase 05 | Complete |
 | DIST-03 | Phase 05 | Pending |
 | DIST-04 | Phase 05 | Pending |
 
