@@ -25,7 +25,7 @@ See `.planning/milestones/` for archived roadmaps.
 - [x] **Phase 02: Deterministic Gates** - Add pre-commit lint/test gates to execute phase and architectural constraint enforcement (completed 2026-03-11)
 - [x] **Phase 03: Entropy Management** - Wire scheduled maintenance sweeps for doc consistency, constraint violations, and stale TODOs (completed 2026-03-11)
 - [x] **Phase 04: Observability Integration** - Config format for telemetry endpoints, executor agent telemetry queries, debug log pulling (completed 2026-03-11)
-- [ ] **Phase 05: NPM Publish & Distribution** - Publish `gsd-multi-model` to npm, version compat checks, clean GSD-base separation
+- [x] **Phase 05: NPM Publish & Distribution** - Publish `gsd-multi-model` to npm, version compat checks, clean GSD-base separation (completed 2026-03-11)
 
 ## Phase Details
 
@@ -100,7 +100,7 @@ Plans:
 **Goal**: `npx gsd-multi-model` installs the add-on layer cleanly on top of existing GSD
 **Depends on**: Phase 01 (can run in parallel with 03/04)
 **Requirements**: DIST-01, DIST-02, DIST-03, DIST-04
-**Plans:** 2 plans
+**Plans:** 2/2 plans complete
 
 Plans:
 - [ ] 05-01-PLAN.md — Version compat check, anti-duplication guards, package metadata fixes
@@ -122,4 +122,4 @@ Plans:
 | 02. Deterministic Gates | 3/3 | Complete    | 2026-03-11 | - |
 | 03. Entropy Management | 3/3 | Complete    | 2026-03-11 | - |
 | 04. Observability Integration | 2/2 | Complete    | 2026-03-11 | - |
-| 05. NPM Publish & Distribution | v2.0 | 0/2 | Not started | - |
+| 05. NPM Publish & Distribution | 2/2 | Complete   | 2026-03-11 | - |

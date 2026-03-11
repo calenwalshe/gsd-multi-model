@@ -37,8 +37,8 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 
 ### Distribution
 
-- [ ] **DIST-01**: `npx gsd-multi-model` installs skills (default), with `--all` for full setup
-- [ ] **DIST-02**: Package published to npm with correct `bin` entry and `files` manifest
+- [x] **DIST-01**: `npx gsd-multi-model` installs skills (default), with `--all` for full setup
+- [x] **DIST-02**: Package published to npm with correct `bin` entry and `files` manifest
 - [ ] **DIST-03**: Version compatibility check against base GSD on install
 - [ ] **DIST-04**: Clean separation — GSD base is prerequisite, multi-model is add-on only
 
@@ -84,8 +84,8 @@ Requirements for Harness Engineering milestone. Each maps to roadmap phases.
 | OBSV-01 | Phase 04 | Complete |
 | OBSV-02 | Phase 04 | Complete |
 | OBSV-03 | Phase 04 | Complete |
-| DIST-01 | Phase 05 | Pending |
-| DIST-02 | Phase 05 | Pending |
+| DIST-01 | Phase 05 | Complete |
+| DIST-02 | Phase 05 | Complete |
 | DIST-03 | Phase 05 | Pending |
 | DIST-04 | Phase 05 | Pending |
 
