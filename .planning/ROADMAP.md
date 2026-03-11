@@ -68,11 +68,11 @@ Plans:
 **Goal**: Codebase entropy is detected and surfaced automatically between milestones, not discovered ad hoc
 **Depends on**: Phase 02
 **Requirements**: ENTR-01, ENTR-02, ENTR-03, ENTR-04
-**Plans:** 1/3 plans executed
+**Plans:** 2/3 plans executed
 
 Plans:
-- [ ] 03-01-PLAN.md — Sweep orchestrator, doc consistency checker, config schema
-- [ ] 03-02-PLAN.md — Stale TODO/FIXME detector with git blame age tracking
+- [x] 03-01-PLAN.md — Sweep orchestrator, doc consistency checker, config schema
+- [x] 03-02-PLAN.md — Stale TODO/FIXME detector with git blame age tracking
 - [ ] 03-03-PLAN.md — Test suites for sweep orchestrator and doc consistency checker
 
 **Success Criteria** (what must be TRUE):
@@ -108,6 +108,6 @@ Plans:
 |-------|-----------|----------------|--------|-----------|
 | 01. The Orchestrator | 3/3 | Complete    | 2026-03-11 | - |
 | 02. Deterministic Gates | 3/3 | Complete    | 2026-03-11 | - |
-| 03. Entropy Management | 1/3 | In Progress|  | - |
+| 03. Entropy Management | 2/3 | In Progress | - | - |
 | 04. Observability Integration | v2.0 | 0/? | Not started | - |
 | 05. NPM Publish & Distribution | v2.0 | 0/? | Not started | - |
