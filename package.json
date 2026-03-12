@@ -1,13 +1,13 @@
 {
   "name": "gsd-multi-model",
-  "version": "1.3.0",
-  "description": "Multi-model add-on for GSD — installs Claude Code skills for dual-tool (Claude + Codex) workflow",
+  "version": "2.0.0",
+  "description": "Multi-model add-on for GSD — installs gsd-multi:* commands for dual-tool (Claude + Codex) workflow",
   "bin": {
     "gsd-multi-model": "./bin/cli.sh"
   },
   "files": [
     "bin/cli.sh",
-    "skills/",
+    "commands/",
     "global/",
     "rules/",
     "gsd-compat.json"
