@@ -3,10 +3,13 @@
 Detailed orchestration logic for `/gsd:drive`. This file is referenced from `SKILL.md` and contains the full decision tree, dispatch mechanism, drive log, pause detection, and retry logic.
 
 **Anti-patterns — never do these:**
-- Do NOT use Agent() for step dispatch — use Skill() only (avoids #686 nesting freeze)
 - Do NOT track state in memory across loop iterations — always re-read from disk
 - Do NOT mention `/clear` to the user — true autopilot
 - Do NOT print verbose output between steps — banners only
+- Do NOT use Skill() for plan/execute/verify — use Agent() to keep orchestrator context lean
+
+**Context management principle:**
+The drive orchestrator must stay under ~15% context. Heavy steps (plan, execute, verify) are dispatched via Agent() so their full output stays in the subagent's context and only a short summary returns. This allows multi-phase drives to complete without context pressure.
 
 ---
 
@@ -126,7 +129,7 @@ RESEARCH_ENABLED=$(node "$HOME/.claude/get-shit-done/bin/gsd-tools.cjs" config-g
 
 ## Section 4: Dispatch Action
 
-Based on the determined action, invoke the appropriate skill via Skill() call. Never use Agent() for dispatch.
+Heavy steps (plan, execute, verify) are dispatched via Agent() to keep the orchestrator's context lean. Light steps (discuss, transition) run inline since they produce minimal output.
 
 ### discuss
 
@@ -193,30 +196,54 @@ When `/gsd:drive` needs context for a phase, generate a minimal CONTEXT.md direc
 
 ### research
 
+Dispatched via Agent() to contain research output.
+
 ```
-Skill(skill="gsd:research-phase", args="${PHASE}")
+Agent(
+  subagent_type="general-purpose",
+  description="Research Phase {PHASE}",
+  prompt="Run /gsd:research-phase {PHASE}. Return only: research file path and a 2-line summary of findings."
+)
 ```
 
 Only dispatched when `workflow.research` is enabled in config.json.
 
 ### plan
 
+Dispatched via Agent() — planning produces large plan files and checker output that would fill the orchestrator's context.
+
 ```
-Skill(skill="gsd:plan-phase", args="${PHASE}")
+Agent(
+  subagent_type="general-purpose",
+  description="Plan Phase {PHASE}",
+  prompt="Run /gsd:plan-phase {PHASE}. Return only: number of plans created, wave structure, and verification result (PASSED/FAILED/iterations)."
+)
 ```
 
 ### execute
 
+Dispatched via Agent() — execution is the heaviest step, spawning its own subagents per plan.
+
 ```
-Skill(skill="gsd:execute-phase", args="${PHASE}")
+Agent(
+  subagent_type="general-purpose",
+  description="Execute Phase {PHASE}",
+  prompt="Run /gsd:execute-phase {PHASE}. Return only: plans completed (N/M), total tests passing, and any failures or blockers."
+)
 ```
 
 Increment `PLANS_EXECUTED` by the number of plans executed (check SUMMARY count delta after return).
 
 ### verify
 
+Dispatched via Agent() — verification reads all source files and produces detailed reports.
+
 ```
-Skill(skill="gsd:verify-work", args="${PHASE}")
+Agent(
+  subagent_type="general-purpose",
+  description="Verify Phase {PHASE}",
+  prompt="Run /gsd:verify-work {PHASE}. Return only: verification status (PASSED/FAILED/gaps_found), score (N/M must-haves), and any gap summaries."
+)
 ```
 
 ### retry-verify
@@ -228,16 +255,26 @@ Handle verification failure with retry:
    ```bash
    rm -f "$PHASE_DIR"/*-UAT.md
    ```
-3. Run gap closure:
+3. Run gap closure via Agent():
    ```
-   Skill(skill="gsd:execute-phase", args="${PHASE} --gaps-only")
+   Agent(
+     subagent_type="general-purpose",
+     description="Gap closure Phase {PHASE}",
+     prompt="Run /gsd:execute-phase {PHASE} --gaps-only. Return only: plans completed and test results."
+   )
    ```
-4. Re-run verification:
+4. Re-run verification via Agent():
    ```
-   Skill(skill="gsd:verify-work", args="${PHASE}")
+   Agent(
+     subagent_type="general-purpose",
+     description="Re-verify Phase {PHASE}",
+     prompt="Run /gsd:verify-work {PHASE}. Return only: verification status and score."
+   )
    ```
 
 ### transition
+
+Runs inline (minimal context cost):
 
 ```
 Skill(skill="gsd:transition", args="${PHASE}")
@@ -247,9 +284,9 @@ After transition completes, the phase is done. Continue to next phase in PHASES 
 
 ### After Every Dispatch
 
-After each Skill() call completes:
+After each Agent() or Skill() call completes:
 1. Re-read STATE.md and all artifacts from disk
-2. Do NOT rely on Skill() return values
+2. Do NOT rely on return values for state — always check disk
 3. Use the artifact checks from Section 3 to determine the outcome
 4. Log the result (Section 5)
 

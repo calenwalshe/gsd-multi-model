@@ -2,7 +2,7 @@
 name: gsd-drive
 description: Auto-drive the full GSD workflow — chains discuss, plan, execute, verify, and advance for one or more phases without manual intervention
 argument-hint: "[--phase N] [--to N]"
-allowed-tools: Read, Write, Bash, Glob, Grep, Task
+allowed-tools: Read, Write, Bash, Glob, Grep, Task, Agent
 ---
 
 # /gsd:drive — Autonomous Workflow Orchestrator
@@ -77,7 +77,7 @@ Execute the drive loop from `drive-workflow.md` using `TARGET_MODE`, `TARGET_PHA
 - Target phase resolution (auto/single/range)
 - The main drive loop (determine action -> dispatch -> log -> repeat)
 - Artifact-based next-action determination
-- Skill() dispatch for each workflow step
+- Agent() dispatch for heavy steps (plan, execute, verify) to keep orchestrator lean
 - Drive log management
 - Pause detection and verification retry logic
 
