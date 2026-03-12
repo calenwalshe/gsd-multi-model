@@ -1,7 +1,6 @@
 ---
 name: gsd-multi:init
 description: Bootstrap a new project with the GSD + Claude Code + Codex dual-tool workflow. Creates AGENTS.md, CLAUDE.md, .claude/rules/, Codex config, and initializes GSD.
-disable-model-invocation: true
 argument-hint: [project-name] [--force]
 allowed-tools: Read, Write, Bash, Glob
 ---

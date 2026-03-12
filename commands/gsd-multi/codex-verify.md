@@ -1,7 +1,6 @@
 ---
 name: gsd-multi:codex-verify
 description: Full dual-tool verification gate -- runs GSD verify-work first, then cross-model review where each tool checks the other's output. This is the combined quality gate before advancing phases.
-disable-model-invocation: true
 argument-hint: [focus-area]
 allowed-tools: Read, Write, Bash, Glob, Grep
 ---

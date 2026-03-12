@@ -1,7 +1,6 @@
 ---
 name: gsd-multi:codex-review
 description: Run cross-model review using Codex CLI. In the dual-tool workflow, Codex reviews Claude's complex work while Claude reviews Codex's autonomous output. This skill triggers Codex to review whatever Claude built.
-disable-model-invocation: true
 argument-hint: [--commits=N] [focus-area]
 allowed-tools: Read, Bash, Glob, Grep
 ---
