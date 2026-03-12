@@ -1,5 +1,5 @@
 ---
-name: install-skill
+name: gsd-multi:install-skill
 description: Install Claude Code skills from a GitHub URL. Clones the repo, finds all SKILL.md files, and installs them to ~/.claude/skills/.
 argument-hint: <github-url> [--force]
 allowed-tools: Bash, Read, Glob, Write
@@ -12,8 +12,8 @@ Install Claude Code skills from any GitHub repository.
 ## Usage
 
 ```
-/install-skill https://github.com/user/repo
-/install-skill https://github.com/user/repo --force    # overwrite existing
+/gsd-multi:install-skill https://github.com/user/repo
+/gsd-multi:install-skill https://github.com/user/repo --force    # overwrite existing
 ```
 
 ## Process
@@ -21,7 +21,7 @@ Install Claude Code skills from any GitHub repository.
 1. **Parse arguments:**
    - Extract URL from `$ARGUMENTS` (first argument that looks like a URL)
    - Check for `--force` flag
-   - If no URL provided, error: `Usage: /install-skill <github-url> [--force]`
+   - If no URL provided, error: `Usage: /gsd-multi:install-skill <github-url> [--force]`
 
 2. **Clone to temp directory:**
    ```bash
@@ -55,7 +55,7 @@ Install Claude Code skills from any GitHub repository.
    ```bash
    cp -r "$SKILL_DIR" "$HOME/.claude/skills/"
    ```
-   - Report each install: `Installed: {name} → ~/.claude/skills/{name}/`
+   - Report each install: `Installed: {name} -> ~/.claude/skills/{name}/`
 
 6. **Check for install.sh:**
    - If the repo has an `install.sh` at root, offer to run it:
@@ -80,7 +80,7 @@ Install Claude Code skills from any GitHub repository.
 
 ## Error Handling
 
-- No URL → show usage
-- Clone fails → "Could not clone {URL}. Check the URL and your GitHub access."
-- No SKILL.md found → "No skills found in this repository."
-- Permission error → "Cannot write to ~/.claude/skills/. Check permissions."
+- No URL -> show usage
+- Clone fails -> "Could not clone {URL}. Check the URL and your GitHub access."
+- No SKILL.md found -> "No skills found in this repository."
+- Permission error -> "Cannot write to ~/.claude/skills/. Check permissions."

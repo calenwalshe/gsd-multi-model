@@ -1,5 +1,5 @@
 ---
-name: init-gsd
+name: gsd-multi:init
 description: Bootstrap a new project with the GSD + Claude Code + Codex dual-tool workflow. Creates AGENTS.md, CLAUDE.md, .claude/rules/, Codex config, and initializes GSD.
 disable-model-invocation: true
 argument-hint: [project-name] [--force]
@@ -43,7 +43,7 @@ Detect the project's technology stack by reading config files. Store results in 
 
 Check each file in order. Use the **first match** as the primary stack, but collect all detected stacks:
 
-**2a. Node.js — check for `package.json`:**
+**2a. Node.js -- check for `package.json`:**
 
 Use the Read tool to read `package.json`. If it exists:
 - Extract `scripts.build` value (e.g., `npm run build`, `tsc`, `vite build`)
@@ -52,7 +52,7 @@ Use the Read tool to read `package.json`. If it exists:
 - Set `STACK_BUILD`, `STACK_TEST`, `STACK_DEV` from these values
 - If scripts section is missing or empty, use: `npm run build`, `npm test`, `npm run dev`
 
-**2b. Python — check for `pyproject.toml`:**
+**2b. Python -- check for `pyproject.toml`:**
 
 Use the Read tool to read `pyproject.toml`. If it exists:
 - Look for `[tool.pytest]` or `[tool.pytest.ini_options]` to detect pytest
@@ -61,7 +61,7 @@ Use the Read tool to read `pyproject.toml`. If it exists:
 - Set `STACK_TEST` to `pytest` if detected, otherwise `python -m pytest`
 - Set `STACK_DEV` to `python -m <module>` or leave as placeholder
 
-**2c. Makefile — check for `Makefile`:**
+**2c. Makefile -- check for `Makefile`:**
 
 Use the Read tool to read `Makefile`. If it exists:
 - Look for targets: `build`, `test`, `run`, `dev`, `all`
@@ -69,7 +69,7 @@ Use the Read tool to read `Makefile`. If it exists:
 - Set `STACK_TEST` to `make test` if target exists
 - Set `STACK_DEV` to `make run` or `make dev` if target exists
 
-**2d. Go — check for `go.mod`:**
+**2d. Go -- check for `go.mod`:**
 
 Use the Read tool to read `go.mod`. If it exists:
 - Extract module name from `module` line
@@ -77,7 +77,7 @@ Use the Read tool to read `go.mod`. If it exists:
 - Set `STACK_TEST` to `go test ./...`
 - Set `STACK_DEV` to `go run .`
 
-**2e. Rust — check for `Cargo.toml`:**
+**2e. Rust -- check for `Cargo.toml`:**
 
 Use the Read tool to read `Cargo.toml`. If it exists:
 - Extract package name from `[package]` section
@@ -112,9 +112,9 @@ Write `AGENTS.md` with this content (substitute `PROJECT_NAME` and stack detecti
 
 ## Architecture
 
-- `src/` — Source code
-- `tests/` — Test files
-- `.planning/` — GSD state (do not manually edit during execution phases)
+- `src/` -- Source code
+- `tests/` -- Test files
+- `.planning/` -- GSD state (do not manually edit during execution phases)
 
 ## Conventions
 
@@ -169,7 +169,7 @@ During execute phase, split tasks by complexity:
 ## Dual-Tool Verification (Cross-Review)
 
 After execution, each tool reviews the OTHER's work:
-- Run `/gsd-codex-verify` for combined verification
+- Run `/gsd-multi:codex-verify` for combined verification
 - Claude verifies Codex's autonomous output against specs
 - Codex reviews Claude's complex changes for blind spots
 Only advance phases after both verification layers pass.
@@ -206,7 +206,7 @@ When working on this project, follow the GSD dual-tool workflow:
 2. If .planning/STATE.md exists, respect the current phase position
 3. During execution, handle complex/interactive tasks -- suggest autonomous tasks for Codex
 4. Each task must produce an atomic, revertable git commit
-5. After execution, run /gsd-codex-verify for cross-review (each tool reviews the other's work)
+5. After execution, run /gsd-multi:codex-verify for cross-review (each tool reviews the other's work)
 ```
 
 ### 5b. planning-files.md (activates on .planning/**)
@@ -299,7 +299,7 @@ rules: []
 
 ## Session Start
 
-Silently read these files (if they exist) — don't narrate, just internalize:
+Silently read these files (if they exist) -- don't narrate, just internalize:
 - `.planning/PROJECT.md`
 - `.planning/MILESTONES.md`
 - `.planning/RETROSPECTIVE.md`
@@ -307,13 +307,13 @@ Silently read these files (if they exist) — don't narrate, just internalize:
 
 Then greet briefly: "Context loaded. What are you thinking about?"
 
-If none of the files exist: "No project context found. We can brainstorm from scratch — what's the idea?"
+If none of the files exist: "No project context found. We can brainstorm from scratch -- what's the idea?"
 
 ## Role
 
 You are a creative thinking partner who knows what the user has built, what worked, what didn't, and what's been deferred.
 
-- Explore ideas freely — no premature structure
+- Explore ideas freely -- no premature structure
 - Ask "what if" questions to expand thinking
 - Connect new ideas to existing project context (shipped features, known gaps, deferred work)
 - Challenge assumptions when useful
@@ -324,7 +324,7 @@ You are a creative thinking partner who knows what the user has built, what work
 - No GSD commands (/status, /switch, /run, /execute)
 - No scaffolding or file creation
 - No project planning or phase breakdowns
-- Don't volunteer to build anything — this is thinking time
+- Don't volunteer to build anything -- this is thinking time
 
 ## When Ideas Solidify
 
@@ -332,7 +332,7 @@ When an idea feels ready to act on, suggest:
 
 "This sounds ready. Start a new session and run `/gsd:new-milestone` to turn it into a plan."
 
-Don't push this — only suggest when the user signals they want to move forward.
+Don't push this -- only suggest when the user signals they want to move forward.
 
 ## Mode Boundaries
 
@@ -341,7 +341,7 @@ If a user types GSD commands: respond with "That's a GSD command. Start a new se
 
 ## Step 7: Global Codex config (one-time)
 
-### 6a. Codex config.toml
+### 7a. Codex config.toml
 
 **Check existence:**
 
@@ -368,7 +368,7 @@ sandbox_mode = "read-only"
 
   3. Add to `global_status` as "~/.codex/config.toml: created".
 
-### 6b. Codex AGENTS.md
+### 7b. Codex AGENTS.md
 
 **Check existence:**
 
@@ -525,10 +525,10 @@ Global config:
 Next steps:
   /gsd:new-project         -- Initialize GSD planning for this project
   /gsd:discuss-phase       -- Start your first phase
-  /gsd:drive               -- Auto-drive the full GSD workflow (discuss -> plan -> execute -> verify -> advance)
+  /gsd-multi:drive         -- Auto-drive the full GSD workflow (discuss -> plan -> execute -> verify -> advance)
 
 After each phase:
-  /codex-review            -- Cross-model validation with Codex
+  /gsd-multi:codex-review  -- Cross-model validation with Codex
 ```
 
 End with this prompt:

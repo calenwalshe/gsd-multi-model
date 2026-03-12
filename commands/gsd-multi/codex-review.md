@@ -1,5 +1,5 @@
 ---
-name: codex-review
+name: gsd-multi:codex-review
 description: Run cross-model review using Codex CLI. In the dual-tool workflow, Codex reviews Claude's complex work while Claude reviews Codex's autonomous output. This skill triggers Codex to review whatever Claude built.
 disable-model-invocation: true
 argument-hint: [--commits=N] [focus-area]
@@ -156,11 +156,11 @@ Build a review prompt that includes:
 6. **Required output format:**
    ```
    For each finding, output exactly one of:
-   CRITICAL: [description] — must fix before shipping
-   WARNING: [description] — should fix, not blocking
-   INFO: [description] — suggestion for improvement
+   CRITICAL: [description] -- must fix before shipping
+   WARNING: [description] -- should fix, not blocking
+   INFO: [description] -- suggestion for improvement
 
-   If no issues found, output: PASS — No issues found.
+   If no issues found, output: PASS -- No issues found.
    ```
 
 ### 5b. Execute the Codex review
@@ -226,9 +226,9 @@ Review the Codex-built changes for:
 Report each finding using the same severity format:
 
 ```
-CRITICAL: [description] — must fix before shipping
-WARNING: [description] — should fix, not blocking
-INFO: [description] — suggestion for improvement
+CRITICAL: [description] -- must fix before shipping
+WARNING: [description] -- should fix, not blocking
+INFO: [description] -- suggestion for improvement
 ```
 
 Set `CLAUDE_REVIEW_STATUS`:
@@ -248,7 +248,7 @@ Format and display the final report. Use this exact structure:
 Scope: Last {COMMIT_COUNT} commits | Focus: {FOCUS_AREA}
 
 --- Codex reviewed Claude's work: {CODEX_REVIEW_STATUS} ---
-{list each finding with severity, or "Codex CLI not available — skipped" or "No findings"}
+{list each finding with severity, or "Codex CLI not available -- skipped" or "No findings"}
 
 --- Claude reviewed Codex's work: {CLAUDE_REVIEW_STATUS} ---
 {list each finding with severity, or "No Codex-built changes found in last N commits" or "No findings"}
@@ -265,7 +265,7 @@ Overall: {verdict}
 ### Recommendation logic:
 
 - **If any CRITICAL findings from either review:**
-  `"Critical issues found. Fix before advancing, then re-run /codex-review."`
+  `"Critical issues found. Fix before advancing, then re-run /gsd-multi:codex-review."`
 
 - **If WARNING findings but no CRITICAL:**
   `"Minor issues found. Consider fixing before advancing."`

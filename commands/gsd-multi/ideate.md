@@ -1,11 +1,11 @@
 ---
-name: ideate
+name: gsd-multi:ideate
 description: Structured brainstorming with full GSD project context. Produces durable IDEATION.md that feeds into /gsd:new-milestone.
 argument-hint: [topic] [--reset]
 allowed-tools: Read, Write, Edit, Glob, Bash, AskUserQuestion
 ---
 
-# GSD Ideate — Structured Brainstorming
+# GSD Ideate -- Structured Brainstorming
 
 Brainstorm ideas with full project awareness. Unlike generic chat, this skill loads your GSD history, connects ideas to what you've built, and produces a durable artifact (`.planning/IDEATION.md`) that bridges directly into `/gsd:new-milestone`.
 
@@ -14,7 +14,7 @@ Brainstorm ideas with full project awareness. Unlike generic chat, this skill lo
 ## Step 1: Parse arguments
 
 1. Check `$ARGUMENTS` for:
-   - **Topic seed**: first non-flag text (e.g., `/gsd:ideate real-time notifications`). Store as `TOPIC`.
+   - **Topic seed**: first non-flag text (e.g., `/gsd-multi:ideate real-time notifications`). Store as `TOPIC`.
    - **`--reset` flag**: if present, set `RESET=true`. Forces fresh IDEATION.md even if one exists.
 2. If no arguments, `TOPIC` is empty and `RESET` is false.
 
@@ -22,11 +22,11 @@ Brainstorm ideas with full project awareness. Unlike generic chat, this skill lo
 
 Read each file below **silently** (do not narrate or print contents). Track which exist:
 
-- `.planning/PROJECT.md` — project identity and goals
-- `.planning/MILESTONES.md` — shipped and upcoming milestones
-- `.planning/RETROSPECTIVE.md` — lessons learned
-- `.planning/STATE.md` — current workflow position
-- `.planning/ROADMAP.md` — phase breakdown of current milestone
+- `.planning/PROJECT.md` -- project identity and goals
+- `.planning/MILESTONES.md` -- shipped and upcoming milestones
+- `.planning/RETROSPECTIVE.md` -- lessons learned
+- `.planning/STATE.md` -- current workflow position
+- `.planning/ROADMAP.md` -- phase breakdown of current milestone
 
 Set `CONTEXT_LEVEL`:
 - **full**: PROJECT.md + MILESTONES.md + at least one of RETROSPECTIVE/ROADMAP exist
@@ -62,7 +62,7 @@ Current state: [phase position from STATE.md, or "between milestones"]
 
 If `CONTEXT_LEVEL` is `minimal`, print:
 ```
-No GSD context found. Brainstorming from scratch — ideas will still be captured in IDEATION.md.
+No GSD context found. Brainstorming from scratch -- ideas will still be captured in IDEATION.md.
 ```
 
 ## Step 5: Open the conversation
@@ -94,7 +94,7 @@ After each distinct idea area is explored (roughly every 2-3 exchanges), **updat
 
 ## Step 7: Write/update `.planning/IDEATION.md`
 
-Maintain this structure. Update incrementally — append new ideas, refine existing ones:
+Maintain this structure. Update incrementally -- append new ideas, refine existing ones:
 
 ```markdown
 # Ideation
@@ -120,7 +120,7 @@ Maintain this structure. Update incrementally — append new ideas, refine exist
 - [Patterns that span multiple ideas]
 
 ## Parking Lot
-- [Ideas set aside for later — not rejected, just not the focus]
+- [Ideas set aside for later -- not rejected, just not the focus]
 
 ## Possible Next Milestones
 - [Candidate milestone descriptions that could feed into /gsd:new-milestone]

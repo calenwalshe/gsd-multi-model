@@ -1,11 +1,11 @@
 ---
-name: observe
+name: gsd-multi:observe
 description: Executor telemetry injection protocol for before/after task comparison during execute phase
 argument-hint: ""
 allowed-tools: Read, Bash
 ---
 
-# Observe — Executor Telemetry Protocol
+# Observe -- Executor Telemetry Protocol
 
 This skill documents a protocol for executor agents to capture telemetry snapshots before and after task changes. It is **not** an automated hook -- executors invoke these steps manually at task boundaries.
 

@@ -1,11 +1,11 @@
 ---
-name: gsd-debug
+name: gsd-multi:debug
 description: Pull real error logs and telemetry from configured observability endpoints for data-driven debugging
 argument-hint: "[endpoint-name] [--health]"
 allowed-tools: Read, Bash, Grep
 ---
 
-# /gsd:debug — Live Telemetry Debugging
+# /gsd-multi:debug -- Live Telemetry Debugging
 
 Pull real error logs from configured endpoints instead of relying on user-pasted logs. This gives agents direct access to live telemetry data for data-driven debugging.
 
@@ -90,7 +90,7 @@ Based on findings, suggest concrete debugging actions:
 
 ## Health Check Mode
 
-If the user runs `/gsd:debug --health`, run the health check to verify endpoint connectivity without pulling full logs:
+If the user runs `/gsd-multi:debug --health`, run the health check to verify endpoint connectivity without pulling full logs:
 
 ```bash
 bash bin/query-telemetry.sh --health

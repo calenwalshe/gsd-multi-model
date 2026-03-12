@@ -1,11 +1,11 @@
 ---
-name: gsd-drive
-description: Auto-drive the full GSD workflow — chains discuss, plan, execute, verify, and advance for one or more phases without manual intervention
+name: gsd-multi:drive
+description: Auto-drive the full GSD workflow -- chains discuss, plan, execute, verify, and advance for one or more phases without manual intervention
 argument-hint: "[--phase N] [--to N]"
 allowed-tools: Read, Write, Bash, Glob, Grep, Task, Agent
 ---
 
-# /gsd:drive — Autonomous Workflow Orchestrator
+# /gsd-multi:drive -- Autonomous Workflow Orchestrator
 
 Drive the full GSD lifecycle (discuss -> plan -> execute -> verify -> advance) for one or more phases. Single entry point that replaces manual step-by-step invocation.
 
@@ -71,7 +71,7 @@ node "$HOME/.claude/get-shit-done/bin/gsd-tools.cjs" config-set workflow._auto_c
 
 Follow the detailed state machine and dispatch logic defined in:
 
-@skills/gsd-drive/drive-workflow.md
+@commands/gsd-multi/drive-workflow.md
 
 Execute the drive loop from `drive-workflow.md` using `TARGET_MODE`, `TARGET_PHASE`, and `TARGET_TO` as inputs. The workflow file contains:
 - Target phase resolution (auto/single/range)
@@ -97,7 +97,7 @@ Drive log written to STATE.md
 
 If there are remaining incomplete phases in ROADMAP.md:
 ```
-Next: Run /gsd:drive to continue with Phase {next_incomplete}
+Next: Run /gsd-multi:drive to continue with Phase {next_incomplete}
 ```
 
 If all phases complete:

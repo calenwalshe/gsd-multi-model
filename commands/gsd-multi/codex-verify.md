@@ -1,12 +1,12 @@
 ---
-name: gsd-codex-verify
-description: Full dual-tool verification gate — runs GSD verify-work first, then cross-model review where each tool checks the other's output. This is the combined quality gate before advancing phases.
+name: gsd-multi:codex-verify
+description: Full dual-tool verification gate -- runs GSD verify-work first, then cross-model review where each tool checks the other's output. This is the combined quality gate before advancing phases.
 disable-model-invocation: true
 argument-hint: [focus-area]
 allowed-tools: Read, Write, Bash, Glob, Grep
 ---
 
-# Full Dual-Tool Verification Gate (/gsd-codex-verify)
+# Full Dual-Tool Verification Gate (/gsd-multi:codex-verify)
 
 This skill is the combined quality gate before advancing phases. It runs GSD structural verification first, then cross-model review where each tool reviews the OTHER's work.
 
@@ -82,7 +82,7 @@ Look for overall PASS or FAIL status in the verification output.
 **If GSD verification FAILED:**
 - Print the failure details (which checks failed, what gaps exist)
 - Print: `"GSD verification failed. Fix structural issues before cross-review."`
-- Print: `"Run /gsd:execute-phase to address gaps, then re-run /gsd-codex-verify."`
+- Print: `"Run /gsd:execute-phase to address gaps, then re-run /gsd-multi:codex-verify."`
 - Write a partial VERIFICATION.md to the phase directory (GSD results only, cross-review skipped):
 
   ```
@@ -267,10 +267,10 @@ Apply these rules in order:
 
 ### 7b. Format the report
 
-Use this exact format with ═══ borders:
+Use this exact format:
 
 ```
-═══ DUAL-TOOL VERIFICATION RESULTS ═══
+=== DUAL-TOOL VERIFICATION RESULTS ===
 
 Phase: {phase name}
 Focus: {FOCUS_AREA}
@@ -288,7 +288,7 @@ Codex reviewed Claude's work:   {PASS|FAIL|WARNING|INCOMPLETE|SKIPPED}
 Overall:                        {PASS|FAIL}
   {recommendation from Step 9 logic}
 
-═══════════════════════════════════════
+========================================
 ```
 
 Display this report inline so the user sees it immediately.
@@ -360,7 +360,7 @@ Based on overall status, print the appropriate recommendation:
   `"Minor issues found. Review findings and decide whether to fix now or defer."`
 
 - **Any CRITICAL finding:**
-  `"Critical issues found. Fix before advancing. Then re-run /gsd-codex-verify."`
+  `"Critical issues found. Fix before advancing. Then re-run /gsd-multi:codex-verify."`
 
 - **Codex INCOMPLETE or SKIPPED, no other issues:**
   `"GSD verification passed. Cross-review unavailable or incomplete. Consider installing/re-running Codex for full coverage."`

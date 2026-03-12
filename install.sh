@@ -5,7 +5,7 @@ set -euo pipefail
 # gsd-multi-model -- Installer
 #
 # Installs the multi-model GSD workflow:
-#   - Claude Code skills (/init-gsd, /codex-review, /gsd-codex-verify)
+#   - Claude Code commands (/gsd-multi:init, /gsd-multi:drive, etc.)
 #   - Global configs for Claude and Codex
 #   - GSD framework across all runtimes
 #
@@ -126,8 +126,6 @@ preflight_check() {
 }
 
 # --- Semver comparison (pure bash integer arithmetic) ---
-# Returns: -1 (a < b), 0 (a == b), 1 (a > b)
-# IFS is local -- does not affect caller
 semver_compare() {
   local a="$1" b="$2"
   local IFS=.
@@ -152,13 +150,11 @@ compat_check() {
   local version_file="$HOME/.claude/get-shit-done/VERSION"
   local compat_file="$SCRIPT_DIR/gsd-compat.json"
 
-  # Skip if VERSION file doesn't exist (GSD gets installed in step 5)
   if [ ! -f "$version_file" ]; then
     GSD_COMPAT_STATUS="not_found"
     return
   fi
 
-  # Read and validate VERSION
   GSD_VERSION=$(cat "$version_file" | tr -d '[:space:]')
   if ! [[ "$GSD_VERSION" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
     warn "GSD VERSION file contains invalid format: $GSD_VERSION"
@@ -166,7 +162,6 @@ compat_check() {
     return
   fi
 
-  # Read compat range from manifest (requires python3)
   if ! command -v python3 &>/dev/null; then
     GSD_COMPAT_STATUS="not_found"
     return
@@ -176,7 +171,6 @@ compat_check() {
   GSD_COMPAT_MAX=$(python3 -c "import json; print(json.load(open('$compat_file'))['gsd_compat']['max'])" 2>/dev/null) || { GSD_COMPAT_STATUS="invalid"; return; }
   GSD_COMPAT_TESTED=$(python3 -c "import json; print(json.load(open('$compat_file'))['gsd_compat']['tested'])" 2>/dev/null) || { GSD_COMPAT_STATUS="invalid"; return; }
 
-  # Compare version against range
   local cmp_min cmp_max
   cmp_min=$(semver_compare "$GSD_VERSION" "$GSD_COMPAT_MIN")
   cmp_max=$(semver_compare "$GSD_VERSION" "$GSD_COMPAT_MAX")
@@ -196,32 +190,62 @@ preflight_check
 compat_check
 
 # --------------------------------------------------
-# 1. Install skills into ~/.claude/skills/ (personal = all projects)
+# 1. Install commands into ~/.claude/commands/gsd-multi/
 # --------------------------------------------------
-echo "==> Installing Claude Code skills..."
+echo "==> Installing gsd-multi commands..."
 
-for skill_dir in "$SCRIPT_DIR/skills"/*/; do
-  [ -d "$skill_dir" ] || continue
-  skill_name="$(basename "$skill_dir")"
-  dest="$HOME/.claude/skills/$skill_name"
+COMMANDS_SRC="$SCRIPT_DIR/commands/gsd-multi"
+COMMANDS_DEST="$HOME/.claude/commands/gsd-multi"
 
-  if [ -d "$dest" ]; then
-    rm -rf "$dest"
-    mkdir -p "$dest"
-    cp -r "$skill_dir"* "$dest/"
-    ok "Updated: $skill_name"
-  else
-    mkdir -p "$dest"
-    cp -r "$skill_dir"* "$dest/"
-    ok "Installed: $skill_name"
-  fi
-  INSTALLED=$((INSTALLED + 1))
-done
+if [ -d "$COMMANDS_SRC" ]; then
+  mkdir -p "$COMMANDS_DEST"
+
+  for cmd_file in "$COMMANDS_SRC"/*.md; do
+    [ -f "$cmd_file" ] || continue
+    cmd_name="$(basename "$cmd_file")"
+    dest="$COMMANDS_DEST/$cmd_name"
+
+    if [ -f "$dest" ] && [ "$FORCE" != true ]; then
+      # Always update commands (they come from this repo)
+      cp "$cmd_file" "$dest"
+      ok "Updated: gsd-multi:${cmd_name%.md}"
+    else
+      cp "$cmd_file" "$dest"
+      ok "Installed: gsd-multi:${cmd_name%.md}"
+    fi
+    INSTALLED=$((INSTALLED + 1))
+  done
+else
+  err "commands/gsd-multi/ directory not found in repo"
+fi
 
 echo ""
 
 # --------------------------------------------------
-# 2. Install .claude/rules/ templates
+# 2. Clean up old skills/ installs (migrate to commands)
+# --------------------------------------------------
+echo "==> Cleaning up legacy skills/ installs..."
+
+LEGACY_SKILLS=(codex-review gate-check gsd-codex-verify gsd-debug gsd-drive ideate init-gsd install-skill observe)
+CLEANED=0
+
+for skill_name in "${LEGACY_SKILLS[@]}"; do
+  legacy_dir="$HOME/.claude/skills/$skill_name"
+  if [ -d "$legacy_dir" ]; then
+    rm -rf "$legacy_dir"
+    ok "Removed legacy skill: $skill_name (migrated to gsd-multi:*)"
+    CLEANED=$((CLEANED + 1))
+  fi
+done
+
+if [ "$CLEANED" -eq 0 ]; then
+  ok "No legacy skills to clean up"
+fi
+
+echo ""
+
+# --------------------------------------------------
+# 3. Install .claude/rules/ templates
 # --------------------------------------------------
 echo "==> Installing .claude/rules/ templates..."
 mkdir -p "$HOME/.claude/rules"
@@ -249,7 +273,7 @@ done
 echo ""
 
 # --------------------------------------------------
-# 3. Set up global Claude preferences
+# 4. Set up global Claude preferences
 # --------------------------------------------------
 echo "==> Setting up global Claude config..."
 
@@ -261,8 +285,8 @@ if [ "$FORCE" = true ]; then
 ## Workflow
 - I use GSD (Get Shit Done) for all non-trivial work
 - Check for /gsd:status and .planning/ at session start
-- After GSD verification, cross-validate with Codex via /codex-review
-- Use /gsd-codex-verify for combined dual-tool verification
+- After GSD verification, cross-validate with Codex via /gsd-multi:codex-review
+- Use /gsd-multi:codex-verify for combined dual-tool verification
 
 ## Dual-Tool Execution
 - Claude Code: complex multi-file changes, architecture, interactive work
@@ -271,7 +295,7 @@ if [ "$FORCE" = true ]; then
 - Each tool reviews the OTHER's output (cross-review)
 
 ## Coding Style
-- Clean, readable code — no unnecessary abstractions
+- Clean, readable code -- no unnecessary abstractions
 - Tests mandatory for new features
 - Atomic commits per task
 - No debug statements in production code
@@ -294,8 +318,8 @@ else
 ## Workflow
 - I use GSD (Get Shit Done) for all non-trivial work
 - Check for /gsd:status and .planning/ at session start
-- After GSD verification, cross-validate with Codex via /codex-review
-- Use /gsd-codex-verify for combined dual-tool verification
+- After GSD verification, cross-validate with Codex via /gsd-multi:codex-review
+- Use /gsd-multi:codex-verify for combined dual-tool verification
 
 ## Dual-Tool Execution
 - Claude Code: complex multi-file changes, architecture, interactive work
@@ -304,7 +328,7 @@ else
 - Each tool reviews the OTHER's output (cross-review)
 
 ## Coding Style
-- Clean, readable code — no unnecessary abstractions
+- Clean, readable code -- no unnecessary abstractions
 - Tests mandatory for new features
 - Atomic commits per task
 - No debug statements in production code
@@ -319,7 +343,7 @@ GLOBAL_CLAUDE
 fi
 
 # --------------------------------------------------
-# 4. Set up global Codex config
+# 5. Set up global Codex config
 # --------------------------------------------------
 echo ""
 echo "==> Setting up global Codex config..."
@@ -360,7 +384,7 @@ else
 fi
 
 # --------------------------------------------------
-# 5. Install GSD framework across all runtimes
+# 6. Install GSD framework across all runtimes
 # --------------------------------------------------
 echo ""
 echo "==> Installing GSD framework..."
@@ -373,7 +397,6 @@ if [ "$GSD_INSTALLED" = true ]; then
   ok "GSD already installed for Claude Code"
   echo "    Checking other runtimes..."
 
-  # Install for missing runtimes
   [ ! -d "$HOME/.codex/skills/gsd-new-project" ] && {
     echo "    Installing for Codex..."
     npx get-shit-done-cc@latest --codex --global 2>&1 | tail -5
@@ -389,7 +412,7 @@ else
 fi
 
 # --------------------------------------------------
-# 6. Create .gitignore
+# 7. Create .gitignore
 # --------------------------------------------------
 echo ""
 echo "==> Setting up .gitignore..."
@@ -403,7 +426,7 @@ done
 ok ".gitignore configured"
 
 # --------------------------------------------------
-# 7. Install runner dependencies (optional)
+# 8. Install runner dependencies (optional)
 # --------------------------------------------------
 echo ""
 echo "==> Setting up GSD Runner (autonomous daemon)..."
@@ -423,7 +446,7 @@ else
 fi
 
 # --------------------------------------------------
-# 7b. Verify installation integrity
+# 9. Verify installation integrity
 # --------------------------------------------------
 verify_integrity() {
   echo ""
@@ -439,30 +462,21 @@ verify_integrity() {
     return 1
   }
 
-  # Skills: compare each file in source skill dir against installed
-  for skill_dir in "$SCRIPT_DIR/skills"/*/; do
-    [ -d "$skill_dir" ] || continue
-    skill_name="$(basename "$skill_dir")"
-    dest_dir="$HOME/.claude/skills/$skill_name"
+  # Commands: compare each file in source commands dir against installed
+  for cmd_file in "$SCRIPT_DIR/commands/gsd-multi/"*.md; do
+    [ -f "$cmd_file" ] || continue
+    cmd_name="$(basename "$cmd_file")"
+    dest="$HOME/.claude/commands/gsd-multi/$cmd_name"
 
-    if [ ! -d "$dest_dir" ]; then
-      err "Missing skill directory: $dest_dir"
+    if [ ! -f "$dest" ]; then
+      err "Missing command: $dest"
       integrity_ok=false
-      continue
+    elif ! cmp -s "$cmd_file" "$dest"; then
+      err "Mismatch: $dest differs from source"
+      integrity_ok=false
+    else
+      ok "gsd-multi:${cmd_name%.md} verified"
     fi
-
-    # Compare files within skill
-    while IFS= read -r -d '' src_file; do
-      rel="${src_file#"$skill_dir"}"
-      dest_file="$dest_dir/$rel"
-      if [ ! -f "$dest_file" ]; then
-        err "Missing: $dest_file (source: $src_file)"
-        integrity_ok=false
-      elif ! cmp -s "$src_file" "$dest_file"; then
-        err "Mismatch: $dest_file differs from source $src_file"
-        integrity_ok=false
-      fi
-    done < <(find "$skill_dir" -type f -print0)
   done
 
   # Rules: compare each rule file
@@ -522,17 +536,23 @@ verify_integrity() {
 verify_integrity
 
 # --------------------------------------------------
-# 8. Summary
+# 10. Summary
 # --------------------------------------------------
 echo ""
 echo "═══════════════════════════════════════════════════════"
 echo " INSTALLATION COMPLETE"
 echo "═══════════════════════════════════════════════════════"
 echo ""
-echo " Skills installed (available in ALL projects):"
-echo "   /init-gsd          -- Bootstrap any new project"
-echo "   /codex-review      -- Cross-model review with Codex"
-echo "   /gsd-codex-verify  -- Combined dual-tool verification"
+echo " Commands installed (available in ALL projects):"
+echo "   /gsd-multi:init          -- Bootstrap any new project"
+echo "   /gsd-multi:drive         -- Auto-drive full GSD workflow"
+echo "   /gsd-multi:codex-review  -- Cross-model review with Codex"
+echo "   /gsd-multi:codex-verify  -- Combined dual-tool verification"
+echo "   /gsd-multi:gate-check    -- Pre-commit quality gates"
+echo "   /gsd-multi:debug         -- Live telemetry debugging"
+echo "   /gsd-multi:ideate        -- Structured brainstorming"
+echo "   /gsd-multi:observe       -- Executor telemetry protocol"
+echo "   /gsd-multi:install-skill -- Install skills from GitHub"
 echo ""
 echo " GSD installed for:"
 echo "   Claude Code  -- /gsd:new-project"
@@ -558,7 +578,7 @@ if [ "$GSD_COMPAT_STATUS" = "compatible" ]; then
 elif [ "$GSD_COMPAT_STATUS" = "outside_range" ]; then
   echo " GSD base: v${GSD_VERSION} (WARNING: outside tested range ${GSD_COMPAT_MIN} - ${GSD_COMPAT_MAX})"
 elif [ "$GSD_COMPAT_STATUS" = "not_found" ]; then
-  echo " GSD base: not detected (will be installed in step 5)"
+  echo " GSD base: not detected (will be installed in step 6)"
 elif [ "$GSD_COMPAT_STATUS" = "invalid" ]; then
   echo " GSD base: version format invalid"
 fi
@@ -566,12 +586,13 @@ echo ""
 echo " HOW TO USE (any new project):"
 echo "   1. mkdir my-project && cd my-project"
 echo "   2. claude"
-echo "   3. /init-gsd              <- bootstraps everything"
-echo "   4. /gsd:new-project       <- start planning"
+echo "   3. /gsd-multi:init         <- bootstraps everything"
+echo "   4. /gsd:new-project        <- start planning"
 echo ""
 echo " The workflow:"
 echo "   discuss -> plan -> execute (Claude + Codex parallel)"
-echo "   -> /gsd-codex-verify (cross-review) -> advance"
+echo "   -> /gsd-multi:codex-verify (cross-review) -> advance"
+echo "   or: /gsd-multi:drive       <- auto-pilot the whole thing"
 echo -e " Status: ${BOLD}$INSTALLED installed${RESET}, $SKIPPED skipped, ${YELLOW}$WARNINGS warnings${RESET}, ${RED}$ERRORS errors${RESET}"
 echo "═══════════════════════════════════════════════════════"
 

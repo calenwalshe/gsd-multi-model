@@ -1,11 +1,11 @@
 ---
-name: gate-check
-description: Deterministic quality gates that run before every task commit during execute phase — blocks commits when lint, architecture, or structural checks fail
+name: gsd-multi:gate-check
+description: Deterministic quality gates that run before every task commit during execute phase -- blocks commits when lint, architecture, or structural checks fail
 argument-hint: ""
 allowed-tools: Read, Bash, Grep
 ---
 
-# Gate Check — Pre-Commit Quality Gates
+# Gate Check -- Pre-Commit Quality Gates
 
 Deterministic gates that intercept the task commit flow during execute phase. Gates run **after staging** and **before committing**. If any gate fails, the commit is blocked until violations are fixed.
 
